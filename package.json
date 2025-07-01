@@ -1,0 +1,25 @@
+{
+  "name": "@anagrambuild/breeze-sdk",
+  "version": "0.0.1",
+  "description": "breeze-sdk",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsup",
+    "test": "cd packages/sdk && npm test",
+    "test:unit": "cd packages/sdk && npm run test:unit",
+    "test:integration": "cd packages/sdk && npm run test:integration",
+    "test:all": "cd packages/sdk && npm run test:all",
+    "build:sdk": "cd packages/sdk && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.15.23",
+    "breeze-ui-library": "^0.0.5",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.11.29",
+    "tsup": "^8.5.0"
+  }
+}
