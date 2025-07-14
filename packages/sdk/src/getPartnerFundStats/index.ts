@@ -1,22 +1,22 @@
 import { ApiClient } from "../builder";
-import UserStats from "./types";
+import PartnerFundStatsInfo from "./types";
 
-export interface QueryForGettingUserFundStats {
-  fund_id?: string;
+export interface QueryForGettingPartnerFundStats {
+  organization_id?: string;
   base_asset?: string;
   fiat_value?: string;
   start: string;
   end: string;
 }
 
-export async function getUserStats(
+export async function getPartnerFundStats(
   api_client: ApiClient,
-  user_id: string,
+  organization_id: string,
   api_key: string,
   start: string,
   end: string,
-  query?: Omit<QueryForGettingUserFundStats, 'start' | 'end'>
-): Promise<UserStats> {
+  query?: Omit<QueryForGettingPartnerFundStats, 'start' | 'end'>
+): Promise<PartnerFundStatsInfo> {
   const headers: Record<string, string> = {
     "api-key": api_key,
   };
@@ -26,11 +26,11 @@ export async function getUserStats(
   params.append('end', end);
   
   if (query) {
-    if (query.fund_id) params.append('fund_id', query.fund_id);
+    if (query.organization_id) params.append('organization_id', query.organization_id);
     if (query.base_asset) params.append('base_asset', query.base_asset);
     if (query.fiat_value) params.append('fiat_value', query.fiat_value);
   }
   
-  const url = `user/${user_id}/stats?${params.toString()}`;
-  return await api_client.request<UserStats>(url, "GET", { headers });
+  const url = `partner/${organization_id}/stats?${params.toString()}`;
+  return await api_client.request<PartnerFundStatsInfo>(url, "GET", { headers });
 }

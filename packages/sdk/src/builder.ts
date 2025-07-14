@@ -40,8 +40,13 @@ export class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+    // Ensure proper URL construction
+    const baseUrl = this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`;
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    const fullUrl = `${baseUrl}${cleanEndpoint}`;
+
     try {
-      const res = await fetch(`${this.baseUrl}${endpoint}`, {
+      const res = await fetch(fullUrl, {
         method,
         headers: {
           'Content-Type': 'application/json',

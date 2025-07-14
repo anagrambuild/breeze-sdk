@@ -1,12 +1,7 @@
 export default interface UserValueInfo {
   success: boolean;
-  result: UserValue;
+  result: Record<string, Value[]>; // Keys are asset names like "USDC", "PYUSD", etc.
 }
-
-type UserValue = {
-  base_asset: string;
-  value: Value[];
-};
 
 type Value = {
   fund_id: string;
