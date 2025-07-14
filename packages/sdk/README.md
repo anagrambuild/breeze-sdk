@@ -63,92 +63,125 @@ Get user information and fund association.
 const userInfo = await sdk.getUserInfo('user_123');
 ```
 
-**`getUserFunds(userId: string)`**
-Get all funds associated with a user.
+**`getFundsForBaseAsset(baseAsset: string)`**
+Get all funds that support a specific base asset.
 
 ```typescript
-const userFunds = await sdk.getUserFunds('user_123');
+const funds = await sdk.getFundsForBaseAsset('USDC');
 ```
 
-**`getUserValue(userId: string)`**
-Get the current value of user's fund holdings.
+**`getUserValue(userId: string, options?)`**
+Get the current value of user's fund holdings with optional query parameters.
 
 ```typescript
+// Basic usage
 const userValue = await sdk.getUserValue('user_123');
+
+// With query parameters
+const userValue = await sdk.getUserValue('user_123', {
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+  baseAsset: 'USDC',
+  fiatValue: 'USD'
+});
 ```
 
-**`getUserStats(userId: string, startDate: string, endDate: string)`**
-Get user statistics for a specified date range.
+**`getUserStats(userId: string, start: string, end: string, options?)`**
+Get user statistics for a specified date range with optional query parameters.
 
 ```typescript
+// Basic usage
 const stats = await sdk.getUserStats(
   'user_123',
   '2025-01-01T00:00:00.000Z',
   '2025-01-31T23:59:59.999Z'
+);
+
+// With query parameters
+const stats = await sdk.getUserStats(
+  'user_123',
+  '2025-01-01T00:00:00.000Z',
+  '2025-01-31T23:59:59.999Z',
+  {
+    fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+    baseAsset: 'USDC',
+    fiatValue: 'USD'
+  }
+);
+```
+
+##### Partner Operations
+
+**`getPartnerFundStats(organizationId: string, start: string, end: string, options?)`**
+Get partner fund statistics for a specified date range.
+
+```typescript
+const partnerStats = await sdk.getPartnerFundStats(
+  'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
+  '2025-01-01T00:00:00.000Z',
+  '2025-01-31T23:59:59.999Z',
+  {
+    baseAsset: 'USDC',
+    fiatValue: 'USD'
+  }
 );
 ```
 
 ##### Transaction Operations
 
 **`createDepositTransaction(options)`**
-Create a deposit transaction with flexible parameters.
+Create a deposit transaction. **Required parameters**: `fundId`, `amount`, `userKey`.
 
 ```typescript
 const depositTx = await sdk.createDepositTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  amount: 100,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  amount: 100, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to deposit all available funds
 });
 ```
 
 **`createWithdrawTransaction(options)`**
-Create a withdraw transaction with flexible parameters.
+Create a withdraw transaction. **Required parameters**: `fundId`, `shares`, `userKey`.
 
 ```typescript
 const withdrawTx = await sdk.createWithdrawTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50, // Note: uses 'shares' not 'amount'
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  shares: 50, // Required - uses 'shares' not 'amount'
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to withdraw all shares
 });
 ```
 
 **`getDepositInstructions(options)`**
-Get Solana transaction instructions for deposits (for advanced users).
+Get Solana transaction instructions for deposits. **Required parameters**: `fundId`, `amount`, `userKey`. Returns an array of instructions.
 
 ```typescript
 const depositIx = await sdk.getDepositInstructions({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  amount: 100,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  amount: 100, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  all: false // Optional
 });
-// Returns detailed Solana instruction data
+// Returns: { success: true, result: { deposit_instruction: [...] } }
 ```
 
-**`getWithdrawInstructions(options)`**
-Get Solana transaction instructions for withdrawals (for advanced users).
+**`getWithdrawInstruction(options)`**
+Get Solana transaction instruction for withdrawals. **Required parameters**: `fundId`, `shares`, `userKey`. Returns a single instruction with lookup table address.
 
 ```typescript
-const withdrawIx = await sdk.getWithdrawInstructions({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50,
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+const withdrawIx = await sdk.getWithdrawInstruction({
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  shares: 50, // Required
+  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  all: false // Optional
 });
-// Returns detailed Solana instruction data with lookup table address
+// Returns: { success: true, result: { lut_address: "...", withdraw_instruction: {...} } }
 ```
 
-**`createUserFundTransaction(fundId: string, userKey: string)`**
-Create a transaction to associate a user with a fund.
-
-```typescript
-const userFundTx = await sdk.createUserFundTransaction(
-  'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
-);
-```
 
 ##### Utility Methods
 
@@ -182,14 +215,7 @@ async function example() {
     const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
     console.log('Fund:', fund.result.fund_id, fund.result.base_asset);
 
-    // 2. Create user fund association
-    const userFund = await sdk.createUserFundTransaction(
-      'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-      '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
-    );
-    console.log('User fund created:', userFund.success);
-
-    // 3. Create deposit transaction
+    // 2. Create deposit transaction
     const deposit = await sdk.createDepositTransaction({
       fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
       amount: 100,
@@ -197,13 +223,13 @@ async function example() {
     });
     console.log('Deposit transaction:', deposit.result);
 
-    // 4. Get deposit instructions (for manual transaction building)
+    // 3. Get deposit instructions (for manual transaction building)
     const instructions = await sdk.getDepositInstructions({
       fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
       amount: 100,
       userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
     });
-    console.log('Instruction accounts:', instructions.result.deposit_instruction.accounts.length);
+    console.log('Instruction accounts:', instructions.result.deposit_instruction[0].accounts.length);
 
   } catch (error) {
     console.error('Error:', error.message);
@@ -219,8 +245,8 @@ For advanced use cases, you can use the individual functions and ApiClient direc
 import { 
   ApiClient, 
   getFund, 
-  createUserFund,
-  getInstructionsForDeposit 
+  getInstructionsForDeposit,
+  getTransactionForDeposit
 } from 'sdk-breeeze';
 
 const apiClient = new ApiClient('http://localhost:8080/');
@@ -264,13 +290,15 @@ import {
   UserInfo, 
   TransactionForDeposit,
   InstructionsForDeposit,
-  CreateUserFundResponse 
+  UserValueInfo,
+  PartnerFundStatsInfo
 } from 'sdk-breeeze';
 
 // All API responses are properly typed
 const fund: FundData = await sdk.getFund('fund_123');
 const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
   fundId: 'fund_123',
+  amount: 100,
   userKey: 'user_key'
 });
 ```
@@ -308,16 +336,16 @@ The SDK interacts with these API endpoints:
 ### GET Endpoints
 - `GET /getfund/{fund_id}` - Get fund information
 - `GET /user/{user_id}` - Get user information  
-- `GET /userfunds/{user_id}` - Get user funds
-- `GET /uservalue/{user_id}` - Get user value
-- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics
+- `GET /uservalue/{user_id}` - Get user value (supports query params)
+- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics (supports query params)
+- `GET /fund/{base_asset}` - Get funds for base asset
+- `GET /partner/{organization_id}/stats?start=...&end=...` - Get partner fund statistics
 
 ### POST Endpoints  
-- `POST /create_user_fund/tx` - Create user fund association
-- `POST /deposit/tx` - Create deposit transaction
-- `POST /withdraw/tx` - Create withdraw transaction
-- `POST /deposit/ix` - Get deposit instructions
-- `POST /withdraw/ix` - Get withdraw instructions
+- `POST /deposit/tx` - Create deposit transaction (requires fundId, amount, userKey)
+- `POST /withdraw/tx` - Create withdraw transaction (requires fundId, shares, userKey)
+- `POST /deposit/ix` - Get deposit instructions (requires fundId, amount, userKey, returns array)
+- `POST /withdraw/ix` - Get withdraw instruction (requires fundId, shares, userKey, returns single instruction)
 
 ## Development
 

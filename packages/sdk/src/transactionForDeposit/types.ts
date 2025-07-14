@@ -8,9 +8,9 @@ export type BodyForTxDeposit = {
 };
 
 type InputForDeposit = {
-  fund_id?: string;
-  amount?: number;
+  fund_id: string;
+  amount: number;
   all?: boolean;
   payer_key?: string;
-  user_key?: string;
+  user_key: string;
 };

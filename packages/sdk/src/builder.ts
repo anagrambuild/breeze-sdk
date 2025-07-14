@@ -40,8 +40,13 @@ export class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+    // Ensure proper URL construction
+    const baseUrl = this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`;
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    const fullUrl = `${baseUrl}${cleanEndpoint}`;
+
     try {
-      const res = await fetch(`${this.baseUrl}${endpoint}`, {
+      const res = await fetch(fullUrl, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -53,15 +58,18 @@ export class ApiClient {
 
       clearTimeout(timeoutId);
 
+      // Get the response text once
+      const responseText = await res.text();
+      
       if (!res.ok) {
         let errorMessage = `Request failed: ${res.status}`;
         let errorBody;
         
         try {
-          errorBody = await res.json();
+          errorBody = JSON.parse(responseText);
           errorMessage = errorBody.message || errorMessage;
         } catch {
-          errorMessage = await res.text() || errorMessage;
+          errorMessage = responseText || errorMessage;
         }
 
         throw new BreezeApiError(
@@ -72,8 +80,18 @@ export class ApiClient {
         );
       }
 
-      const data = await res.json();
-      return data;
+      // Parse the response text as JSON
+      try {
+        const data = JSON.parse(responseText);
+        return data;
+      } catch (parseError) {
+        throw new BreezeApiError(
+          `Failed to parse JSON response: ${parseError}`,
+          res.status,
+          'PARSE_ERROR',
+          responseText
+        );
+      }
     } catch (error: any) {
       clearTimeout(timeoutId);
       

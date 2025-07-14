@@ -1,14 +1,14 @@
 import { ApiClient, BreezeApiError } from './builder';
 import { getFund } from './getFund';
-import { getUserFund } from './getUserFund';
 import { getUserInfo } from './getUserInfo';
-import { getUserStats } from './getUserStats';
-import { getUserValue } from './getUserValue';
+import { getUserStats, QueryForGettingUserFundStats } from './getUserStats';
+import { getUserValue, QueryForGettingUserValue } from './getUserValue';
+import { getFundsForBaseAsset } from './getFundsForBaseAsset';
+import { getPartnerFundStats, QueryForGettingPartnerFundStats } from './getPartnerFundStats';
 import { getTransactionForDeposit } from './transactionForDeposit';
 import { getTransactionForWithdraw } from './transactionForWithdraw';
 import { getInstructionsForDeposit } from './instructionsForDeposit';
-import { getInstructionsForWithdraw } from './instructionsForWithdraw';
-import { createUserFund } from './createUserFund';
+import { getInstructionForWithdraw } from './instructionsForWithdraw';
 
 export interface BreezeSDKConfig {
   baseUrl?: string;
@@ -30,98 +30,126 @@ export class BreezeSDK {
     return getFund(this.apiClient, fundId, this.apiKey);
   }
 
+  async getFundsForBaseAsset(baseAsset: string) {
+    return getFundsForBaseAsset(this.apiClient, baseAsset, this.apiKey);
+  }
+
   // User operations
   async getUserInfo(userId: string) {
     return getUserInfo(this.apiClient, userId, this.apiKey);
   }
 
-  async getUserFunds(userId: string) {
-    return getUserFund(this.apiClient, userId, this.apiKey);
+  async getUserValue(userId: string, options?: {
+    fundId?: string;
+    baseAsset?: string;
+    fiatValue?: string;
+  }) {
+    const query: QueryForGettingUserValue | undefined = options ? {
+      fund_id: options.fundId,
+      base_asset: options.baseAsset,
+      fiat_value: options.fiatValue
+    } : undefined;
+    return getUserValue(this.apiClient, userId, this.apiKey, query);
   }
 
-  async getUserValue(userId: string) {
-    return getUserValue(this.apiClient, userId, this.apiKey);
+  async getUserStats(userId: string, start: string, end: string, options?: {
+    fundId?: string;
+    baseAsset?: string;
+    fiatValue?: string;
+  }) {
+    const query: Omit<QueryForGettingUserFundStats, 'start' | 'end'> | undefined = options ? {
+      fund_id: options.fundId,
+      base_asset: options.baseAsset,
+      fiat_value: options.fiatValue
+    } : undefined;
+    return getUserStats(this.apiClient, userId, this.apiKey, start, end, query);
   }
 
-  async getUserStats(userId: string, startDate: string, endDate: string) {
-    return getUserStats(this.apiClient, userId, this.apiKey, startDate, endDate);
+  // Partner operations
+  async getPartnerFundStats(organizationId: string, start: string, end: string, options?: {
+    organizationId?: string;
+    baseAsset?: string;
+    fiatValue?: string;
+  }) {
+    const query: Omit<QueryForGettingPartnerFundStats, 'start' | 'end'> | undefined = options ? {
+      organization_id: options.organizationId,
+      base_asset: options.baseAsset,
+      fiat_value: options.fiatValue
+    } : undefined;
+    return getPartnerFundStats(this.apiClient, organizationId, this.apiKey, start, end, query);
   }
 
   // Transaction operations
   async createDepositTransaction(options: {
-    fundId?: string;
-    amount?: number;
+    fundId: string;
+    amount: number;
+    userKey: string;
     all?: boolean;
     payerKey?: string;
-    userKey?: string;
   }) {
     return getTransactionForDeposit(
       this.apiClient,
       this.apiKey,
       options.fundId,
       options.amount,
+      options.userKey,
       options.all,
-      options.payerKey,
-      options.userKey
+      options.payerKey
     );
   }
 
   async createWithdrawTransaction(options: {
-    fundId?: string;
-    shares?: number;
+    fundId: string;
+    shares: number;
+    userKey: string;
     all?: boolean;
     payerKey?: string;
-    userKey?: string;
   }) {
     return getTransactionForWithdraw(
       this.apiClient,
       this.apiKey,
       options.fundId,
       options.shares,
+      options.userKey,
       options.all,
-      options.payerKey,
-      options.userKey
+      options.payerKey
     );
   }
 
   async getDepositInstructions(options: {
-    fundId?: string;
-    amount?: number;
+    fundId: string;
+    amount: number;
+    userKey: string;
     all?: boolean;
     payerKey?: string;
-    userKey?: string;
   }) {
     return getInstructionsForDeposit(
       this.apiClient,
       this.apiKey,
       options.fundId,
       options.amount,
+      options.userKey,
       options.all,
-      options.payerKey,
-      options.userKey
+      options.payerKey
     );
   }
 
-  async getWithdrawInstructions(options: {
-    fundId?: string;
-    shares?: number;
+  async getWithdrawInstruction(options: {
+    fundId: string;
+    shares: number;
+    userKey: string;
     all?: boolean;
     payerKey?: string;
-    userKey?: string;
   }) {
-    return getInstructionsForWithdraw(
+    return getInstructionForWithdraw(
       this.apiClient,
       this.apiKey,
       options.fundId,
       options.shares,
+      options.userKey,
       options.all,
-      options.payerKey,
-      options.userKey
+      options.payerKey
     );
-  }
-
-  async createUserFundTransaction(fundId: string, userKey: string) {
-    return createUserFund(this.apiClient, this.apiKey, fundId, userKey);
   }
 
   // Utility methods

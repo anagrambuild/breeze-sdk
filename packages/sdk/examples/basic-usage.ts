@@ -5,55 +5,87 @@ async function exampleUsage() {
   // Initialize the SDK
   const sdk = new BreezeSDK({
     baseUrl: 'http://localhost:8080/', // Your API base URL
-    apiKey: 'your-api-key-here',
+    apiKey: 'userkey_0000', // Use actual test API key
     timeout: 30000 // Optional: request timeout in milliseconds
   });
 
   try {
     // Get fund information
-    const fundData = await sdk.getFund('fund_12855430823');
+    const fundData = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
     console.log('Fund data:', fundData);
 
     // Get user information
-    const userInfo = await sdk.getUserInfo('user_2316565914');
+    const userInfo = await sdk.getUserInfo('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
     console.log('User info:', userInfo);
 
-    // Get user's funds
-    const userFunds = await sdk.getUserFunds('user_2316565914');
-    console.log('User funds:', userFunds);
+    // Get funds for a specific base asset
+    const funds = await sdk.getFundsForBaseAsset('USDC');
+    console.log('USDC funds:', funds);
 
-    // Create a deposit transaction
+    // Get user value with query parameters
+    const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', {
+      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+      baseAsset: 'USDC'
+    });
+    console.log('User value:', userValue);
+
+    // Create a deposit transaction (required: fundId, amount, userKey)
     const depositTx = await sdk.createDepositTransaction({
-      fundId: 'fund_12855430823', // fund ID
-      amount: 100, // amount
-      userKey: 'user_wallet_public_key', // user's wallet public key
-      all: false // all: whether to deposit all available funds
+      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+      amount: 100, // Required
+      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+      all: false // Optional: whether to deposit all available funds
     });
     console.log('Deposit transaction:', depositTx);
 
-    // Create a withdraw transaction
+    // Create a withdraw transaction (required: fundId, shares, userKey)
     const withdrawTx = await sdk.createWithdrawTransaction({
-      fundId: 'fund_12855430823', // fund ID
-      shares: 50, // amount
-      userKey: 'user_wallet_public_key', // user's wallet public key
-      all: false // all: whether to withdraw all shares
+      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+      shares: 50, // Required (note: shares, not amount)
+      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
+      all: false // Optional: whether to withdraw all shares
     });
     console.log('Withdraw transaction:', withdrawTx);
 
-    // Create a user fund transaction
-    const userFundTx = await sdk.createUserFundTransaction(
-      'fund_12855430823', // fund ID
-      'user_wallet_public_key' // user's wallet public key
-    );
-    console.log('User fund transaction:', userFundTx);
+    // Get deposit instructions (returns array of instructions)
+    const depositInstructions = await sdk.getDepositInstructions({
+      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+      amount: 100,
+      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+    });
+    console.log('Deposit instructions:', depositInstructions.result.deposit_instruction.length);
 
-    // Get user statistics for a date range
+    // Get withdraw instruction (returns single instruction with lut_address)
+    const withdrawInstruction = await sdk.getWithdrawInstruction({
+      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+      shares: 50,
+      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+    });
+    console.log('Withdraw instruction:', withdrawInstruction.result.withdraw_instruction);
+    console.log('Lookup table address:', withdrawInstruction.result.lut_address);
+
+    // Get user statistics for a date range with query parameters
     const userStats = await sdk.getUserStats(
-      'user_2316565914',
-      '2025-01-01T00:00:00.000Z', // start date
-      '2025-01-31T23:59:59.999Z'  // end date
+      '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+      '2025-07-11T15:34:39.406Z', // start date
+      '2025-07-13T19:34:39.406Z', // end date
+      {
+        fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+        baseAsset: 'USDC'
+      }
     );
     console.log('User stats:', userStats);
+
+    // Get partner fund statistics
+    const partnerStats = await sdk.getPartnerFundStats(
+      'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
+      '2025-07-11T15:34:39.406Z',
+      '2025-07-13T19:34:39.406Z',
+      {
+        baseAsset: 'USDC'
+      }
+    );
+    console.log('Partner stats:', partnerStats);
 
   } catch (error) {
     console.error('API Error:', error);
