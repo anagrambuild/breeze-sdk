@@ -179,23 +179,7 @@ async function integrationFlow() {
           
           // Send transaction
           logInfo('Sending transaction to network...');
-          const txSignature = connection.sendTransaction(transaction);
-          
-          
-          // await sendAndConfirmTransaction(
-          //   connection,
-          //   transaction,
-          //   [userKeypair],
-          //   { commitment: 'confirmed' }
-          // );
-
-          // const confirmation = await connection.confirmTransaction(txSignature, 'confirmed');
-
-          //   if (confirmation.value.err) {
-          //       logInfo('Failed to confirm transaction'); 
-          //       return;
-          //   }   
-
+          const txSignature = connection.sendTransaction(transaction); 
 
           logSuccess(`Deposit transaction confirmed: ${txSignature}`);
           logInfo(`View on explorer: https://explorer.solana.com/tx/${txSignature}?cluster=mainnet-beta`);
