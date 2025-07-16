@@ -5,13 +5,13 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install sdk-breeeze
+npm install sdk-brreeezze
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'sdk-brreeezze';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
@@ -54,20 +54,22 @@ const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
 // Returns fund data with fund_index, lut_address, allocations, etc.
 ```
 
+**`getFundsForBaseAsset(baseAsset: string)`**
+Get all funds that support a specific base asset.
+
+```typescript
+const funds = await sdk.getFundsForBaseAsset('USDC');
+// Returns array of funds supporting USDC
+```
+
 ##### User Operations
 
 **`getUserInfo(userId: string)`**
 Get user information and fund association.
 
 ```typescript
-const userInfo = await sdk.getUserInfo('user_123');
-```
-
-**`getFundsForBaseAsset(baseAsset: string)`**
-Get all funds that support a specific base asset.
-
-```typescript
-const funds = await sdk.getFundsForBaseAsset('USDC');
+const userInfo = await sdk.getUserInfo('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
+// Returns user fund associations and shares
 ```
 
 **`getUserValue(userId: string, options?)`**
@@ -75,14 +77,15 @@ Get the current value of user's fund holdings with optional query parameters.
 
 ```typescript
 // Basic usage
-const userValue = await sdk.getUserValue('user_123');
+const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
 
 // With query parameters
-const userValue = await sdk.getUserValue('user_123', {
+const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', {
   fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
   baseAsset: 'USDC',
   fiatValue: 'USD'
 });
+// Returns: { success: true, result: { "USDC": [{ fund_id, base_asset_value, percent_of_fund, total_fund_value }] } }
 ```
 
 **`getUserStats(userId: string, start: string, end: string, options?)`**
@@ -91,14 +94,14 @@ Get user statistics for a specified date range with optional query parameters.
 ```typescript
 // Basic usage
 const stats = await sdk.getUserStats(
-  'user_123',
+  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
   '2025-01-01T00:00:00.000Z',
   '2025-01-31T23:59:59.999Z'
 );
 
 // With query parameters
 const stats = await sdk.getUserStats(
-  'user_123',
+  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
   '2025-01-01T00:00:00.000Z',
   '2025-01-31T23:59:59.999Z',
   {
@@ -107,6 +110,7 @@ const stats = await sdk.getUserStats(
     fiatValue: 'USD'
   }
 );
+// Returns time series data with yield percentages and values
 ```
 
 ##### Partner Operations
@@ -124,6 +128,7 @@ const partnerStats = await sdk.getPartnerFundStats(
     fiatValue: 'USD'
   }
 );
+// Returns fund performance data with time series and metadata
 ```
 
 ##### Transaction Operations
@@ -139,6 +144,7 @@ const depositTx = await sdk.createDepositTransaction({
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to deposit all available funds
 });
+// Returns base64 encoded transaction ready for signing
 ```
 
 **`createWithdrawTransaction(options)`**
@@ -152,6 +158,7 @@ const withdrawTx = await sdk.createWithdrawTransaction({
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional: whether to withdraw all shares
 });
+// Returns base64 encoded transaction ready for signing
 ```
 
 **`getDepositInstructions(options)`**
@@ -165,7 +172,7 @@ const depositIx = await sdk.getDepositInstructions({
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional
 });
-// Returns: { success: true, result: { deposit_instruction: [...] } }
+// Returns: { success: true, result: { deposit_instruction: [{ program_id, accounts, data }] } }
 ```
 
 **`getWithdrawInstruction(options)`**
@@ -179,9 +186,8 @@ const withdrawIx = await sdk.getWithdrawInstruction({
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
   all: false // Optional
 });
-// Returns: { success: true, result: { lut_address: "...", withdraw_instruction: {...} } }
+// Returns: { success: true, result: { lut_address: "...", withdraw_instruction: { program_id, accounts, data } } }
 ```
-
 
 ##### Utility Methods
 
@@ -202,7 +208,7 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'sdk-brreeezze';
 
 async function example() {
   const sdk = new BreezeSDK({
@@ -229,12 +235,40 @@ async function example() {
       amount: 100,
       userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
     });
-    console.log('Instruction accounts:', instructions.result.deposit_instruction[0].accounts.length);
+    console.log('Instruction count:', instructions.result.deposit_instruction.length);
 
   } catch (error) {
     console.error('Error:', error.message);
   }
 }
+```
+
+## Transaction Signing and Execution
+
+For executing transactions on Solana, you'll need to sign and send them:
+
+```typescript
+import { Connection, Keypair, VersionedTransaction } from '@solana/web3.js';
+import bs58 from 'bs58';
+
+// Create connection and keypair
+const connection = new Connection('https://api.mainnet-beta.solana.com');
+const userKeypair = Keypair.fromSecretKey(bs58.decode('your-private-key'));
+
+// Create transaction
+const depositTx = await sdk.createDepositTransaction({
+  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+  amount: 100,
+  userKey: userKeypair.publicKey.toString()
+});
+
+// Sign and send transaction
+const txBuffer = Buffer.from(depositTx.result, 'base64');
+const transaction = VersionedTransaction.deserialize(txBuffer);
+transaction.sign([userKeypair]);
+
+const signature = await connection.sendTransaction(transaction);
+console.log('Transaction signature:', signature);
 ```
 
 ## Low-Level API
@@ -247,7 +281,7 @@ import {
   getFund, 
   getInstructionsForDeposit,
   getTransactionForDeposit
-} from 'sdk-breeeze';
+} from 'sdk-brreeezze';
 
 const apiClient = new ApiClient('http://localhost:8080/');
 const fundData = await getFund(apiClient, 'fund_123', 'api_key');
@@ -258,7 +292,7 @@ const fundData = await getFund(apiClient, 'fund_123', 'api_key');
 The SDK uses custom error types for better error handling:
 
 ```typescript
-import { BreezeApiError } from 'sdk-breeeze';
+import { BreezeApiError } from 'sdk-brreeezze';
 
 try {
   const fund = await sdk.getFund('invalid_fund_id');
@@ -280,6 +314,17 @@ try {
   - `code?: string` - Error code ('TIMEOUT', 'NETWORK_ERROR', etc.)
   - `response?: any` - Full error response from the API
 
+### Server Response Handling
+
+The SDK handles server response variations including typos:
+
+```typescript
+// The SDK automatically handles both "success" and "sucess" (server typo)
+if (response.success || response.sucess) {
+  // Handle successful response
+}
+```
+
 ## TypeScript Support
 
 The SDK is written in TypeScript and provides full type definitions:
@@ -292,7 +337,7 @@ import {
   InstructionsForDeposit,
   UserValueInfo,
   PartnerFundStatsInfo
-} from 'sdk-breeeze';
+} from 'sdk-brreeezze';
 
 // All API responses are properly typed
 const fund: FundData = await sdk.getFund('fund_123');
@@ -308,26 +353,23 @@ const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
 ### Integration Tests
 Run integration tests against your real API server:
 
-1. First, ensure your Rust API server is running on `localhost:8080`
-2. Update the test configuration in all tests with valid IDs
-3. Run the tests:
-
-### Quick Testing
-Test individual endpoints:
 ```bash
-cd packages/sdk
-
-# Test deposit actions  
-node test_deposit_actions.js
-
-# Test withdraw actions  
-node test_withdraw_actions.js
-
-# Test GET endpoints
-node test_other_get_reqs.js
+npm run test:integration
 ```
 
+### Example Scripts
+Test the SDK with example scripts:
 
+```bash
+# Basic usage example
+npm run example:basic
+
+# Full integration flow with transaction execution
+npm run example:integration
+
+# Simple API demonstration (no transaction execution)
+npx tsx examples/integration-flow-simple.ts
+```
 
 ## API Endpoints
 
@@ -355,6 +397,14 @@ The SDK interacts with these API endpoints:
 npm run build
 ```
 
+### Example Usage
+
+The SDK includes comprehensive examples in the `examples/` directory:
+
+1. **`basic-usage.ts`** - Simple SDK initialization and basic method calls
+2. **`integration-flow.ts`** - Complete transaction flow with Solana execution
+3. **`integration-flow-simple.ts`** - API demonstration without transaction execution
+
 ### Project Structure
 
 ```
@@ -364,12 +414,23 @@ src/
 ├── index.ts                   # Main exports
 ├── getFund/                   # Fund-related operations
 ├── getUserInfo/               # User info operations
-├── getUserFund/               # User fund operations
 ├── getUserStats/              # User statistics
 ├── getUserValue/              # User value operations  
+├── getFundsForBaseAsset/      # Base asset fund operations
+├── getPartnerFundStats/       # Partner statistics
 ├── transactionForDeposit/     # Deposit transactions
 ├── transactionForWithdraw/    # Withdraw transactions
 ├── instructionsForDeposit/    # Deposit instructions
-├── instructionsForWithdraw/   # Withdraw instructions
-└── createUserFund/            # User fund creation
+└── instructionsForWithdraw/   # Withdraw instructions
 ```
+
+## Key Features
+
+- ✅ **Complete API Coverage**: All fund, user, and transaction operations
+- ✅ **TypeScript Support**: Full type definitions and IntelliSense
+- ✅ **Error Handling**: Custom error types with detailed information
+- ✅ **Query Parameters**: Support for filtering and customization
+- ✅ **Solana Integration**: Ready for transaction signing and execution
+- ✅ **Comprehensive Examples**: Real-world usage patterns
+- ✅ **Integration Tests**: Test against live API servers
+- ✅ **Flexible Configuration**: Customizable base URL, timeout, and API keys
