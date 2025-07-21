@@ -1,6 +1,6 @@
 # Breeze SDK
 
-A comprehensive TypeScript SDK for interacting with the Breeze API, providing a clean interface for fund management, user operations, and transaction handling.
+A comprehensive TypeScript SDK for interacting with the Breeze API, providing a clean interface for user yield tracking, balance management, and transaction handling.
 
 ## Installation
 
@@ -20,9 +20,11 @@ const sdk = new BreezeSDK({
   timeout: 30000 // Optional: request timeout in milliseconds (default: 30000)
 });
 
-// Get fund information
-const fundData = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
-console.log('Fund data:', fundData);
+// Get user yield data
+const userYield = await sdk.getUserYield({
+  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+});
+console.log('Total yield earned:', userYield.total_yield_earned);
 ```
 
 ## API Reference
@@ -44,91 +46,89 @@ new BreezeSDK(config: BreezeSDKConfig)
 
 #### Methods
 
-##### Fund Operations
-
-**`getFund(fundId: string)`**
-Get detailed information about a specific fund including allocations, constraints, and current values.
-
-```typescript
-const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
-// Returns fund data with fund_index, lut_address, allocations, etc.
-```
-
-**`getFundsForBaseAsset(baseAsset: string)`**
-Get all funds that support a specific base asset.
-
-```typescript
-const funds = await sdk.getFundsForBaseAsset('USDC');
-// Returns array of funds supporting USDC
-```
-
 ##### User Operations
 
-**`getUserInfo(userId: string)`**
-Get user information and fund association.
-
-```typescript
-const userInfo = await sdk.getUserInfo('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
-// Returns user fund associations and shares
-```
-
-**`getUserValue(userId: string, options?)`**
-Get the current value of user's fund holdings with optional query parameters.
+**`getUserYield(options)`**
+Get user yield data with pagination and fund filtering.
 
 ```typescript
 // Basic usage
-const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh');
-
-// With query parameters
-const userValue = await sdk.getUserValue('4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', {
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  baseAsset: 'USDC',
-  fiatValue: 'USD'
+const userYield = await sdk.getUserYield({
+  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
 });
-// Returns: { success: true, result: { "USDC": [{ fund_id, base_asset_value, percent_of_fund, total_fund_value }] } }
+
+// With optional parameters
+const userYield = await sdk.getUserYield({
+  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Optional filter
+  page: 1,      // Optional pagination
+  limit: 10     // Optional pagination
+});
+
+// Returns:
+// {
+//   "yields": [
+//     {
+//       "fund_id": "fund_123",
+//       "fund_name": "USDC Yield Fund",
+//       "base_asset": "USDC",
+//       "position_value": "500.00",
+//       "yield_earned": "25.50",
+//       "apy": "5.10",
+//       "entry_date": "2024-01-15T10:30:00Z",
+//       "last_updated": "2024-01-20T14:45:00Z"
+//     }
+//   ],
+//   "pagination": {
+//     "page": 1,
+//     "limit": 10,
+//     "total_items": 1,
+//     "total_pages": 1
+//   },
+//   "total_yield_earned": "25.50"
+// }
 ```
 
-**`getUserStats(userId: string, start: string, end: string, options?)`**
-Get user statistics for a specified date range with optional query parameters.
+**`getUserBalances(options)`**
+Get user balance information with asset filtering and sorting.
 
 ```typescript
 // Basic usage
-const stats = await sdk.getUserStats(
-  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
-  '2025-01-01T00:00:00.000Z',
-  '2025-01-31T23:59:59.999Z'
-);
+const userBalances = await sdk.getUserBalances({
+  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+});
 
-// With query parameters
-const stats = await sdk.getUserStats(
-  '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
-  '2025-01-01T00:00:00.000Z',
-  '2025-01-31T23:59:59.999Z',
-  {
-    fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-    baseAsset: 'USDC',
-    fiatValue: 'USD'
-  }
-);
-// Returns time series data with yield percentages and values
-```
+// With optional parameters
+const userBalances = await sdk.getUserBalances({
+  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  asset: 'USDC',        // Optional filter
+  sortBy: 'balance',    // Optional sorting
+  sortOrder: 'desc'     // Optional sort order
+});
 
-##### Partner Operations
-
-**`getPartnerFundStats(organizationId: string, start: string, end: string, options?)`**
-Get partner fund statistics for a specified date range.
-
-```typescript
-const partnerStats = await sdk.getPartnerFundStats(
-  'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
-  '2025-01-01T00:00:00.000Z',
-  '2025-01-31T23:59:59.999Z',
-  {
-    baseAsset: 'USDC',
-    fiatValue: 'USD'
-  }
-);
-// Returns fund performance data with time series and metadata
+// Returns:
+// {
+//   "balances": [
+//     {
+//       "asset": "USDC",
+//       "symbol": "USDC",
+//       "wallet_balance": "1000.00",
+//       "fund_positions": [
+//         {
+//           "fund_id": "fund_123",
+//           "fund_name": "USDC Yield Fund",
+//           "position_value": "500.00",
+//           "yield_earned": "25.50",
+//           "apy": "5.10"
+//         }
+//       ],
+//       "total_balance": "1525.50",
+//       "total_yield": "25.50"
+//     }
+//   ],
+//   "total_portfolio_value": "1525.50",
+//   "total_yield_earned": "25.50"
+// }
 ```
 
 ##### Transaction Operations
@@ -148,45 +148,45 @@ const depositTx = await sdk.createDepositTransaction({
 ```
 
 **`createWithdrawTransaction(options)`**
-Create a withdraw transaction. **Required parameters**: `fundId`, `shares`, `userKey`.
+Create a withdraw transaction. **Required parameters**: `fundId`, `amount`, `userKey`.
 
 ```typescript
 const withdrawTx = await sdk.createWithdrawTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
-  shares: 50, // Required - uses 'shares' not 'amount'
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
-  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
-  all: false // Optional: whether to withdraw all shares
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+  amount: 50, // Required
+  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
+  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
+  all: false // Optional: whether to withdraw all amount
 });
-// Returns base64 encoded transaction ready for signing
+// Returns: { success: true, result: "base64-encoded-transaction" }
 ```
 
 **`getDepositInstructions(options)`**
-Get Solana transaction instructions for deposits. **Required parameters**: `fundId`, `amount`, `userKey`. Returns an array of instructions.
+Get Solana transaction instructions for deposits. **Required parameters**: `fundId`, `amount`, `userKey`.
 
 ```typescript
 const depositIx = await sdk.getDepositInstructions({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
   amount: 100, // Required
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
-  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
+  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
   all: false // Optional
 });
-// Returns: { success: true, result: { deposit_instruction: [{ program_id, accounts, data }] } }
+// Returns: { deposit_instruction: [instruction_objects] }
 ```
 
 **`getWithdrawInstruction(options)`**
-Get Solana transaction instruction for withdrawals. **Required parameters**: `fundId`, `shares`, `userKey`. Returns a single instruction with lookup table address.
+Get Solana transaction instruction for withdrawals. **Required parameters**: `fundId`, `amount`, `userKey`.
 
 ```typescript
 const withdrawIx = await sdk.getWithdrawInstruction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
-  shares: 50, // Required
-  userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
-  payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+  amount: 50, // Required
+  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
+  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
   all: false // Optional
 });
-// Returns: { success: true, result: { lut_address: "...", withdraw_instruction: { program_id, accounts, data } } }
+// Returns: { lut_address: "...", withdraw_instruction: instruction_object }
 ```
 
 ##### Utility Methods
@@ -213,29 +213,44 @@ import { BreezeSDK } from 'sdk-brreeezze';
 async function example() {
   const sdk = new BreezeSDK({
     baseUrl: 'http://localhost:8080/',
-    apiKey: 'userkey_0000'
+    apiKey: 'your-api-key-here'
   });
 
   try {
-    // 1. Get fund information
-    const fund = await sdk.getFund('DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW');
-    console.log('Fund:', fund.result.fund_id, fund.result.base_asset);
+    // 1. Get user yield data
+    const userYield = await sdk.getUserYield({
+      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      page: 1,
+      limit: 10
+    });
+    console.log('Total yield earned:', userYield.total_yield_earned);
+    console.log('Yield records:', userYield.yields.length);
 
-    // 2. Create deposit transaction
+    // 2. Get user balances
+    const userBalances = await sdk.getUserBalances({
+      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      asset: 'USDC',
+      sortBy: 'balance',
+      sortOrder: 'desc'
+    });
+    console.log('Total portfolio value:', userBalances.total_portfolio_value);
+    console.log('Balance records:', userBalances.balances.length);
+
+    // 3. Create deposit transaction
     const deposit = await sdk.createDepositTransaction({
-      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
-      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
     });
-    console.log('Deposit transaction:', deposit.result);
+    console.log('Deposit transaction created:', deposit.success);
 
-    // 3. Get deposit instructions (for manual transaction building)
+    // 4. Get deposit instructions (for manual transaction building)
     const instructions = await sdk.getDepositInstructions({
-      fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
-      userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
+      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
     });
-    console.log('Instruction count:', instructions.result.deposit_instruction.length);
+    console.log('Has instructions:', !!instructions.deposit_instruction);
 
   } catch (error) {
     console.error('Error:', error.message);
@@ -278,13 +293,15 @@ For advanced use cases, you can use the individual functions and ApiClient direc
 ```typescript
 import { 
   ApiClient, 
-  getFund, 
+  getUserYield,
+  getUserBalances,
   getInstructionsForDeposit,
   getTransactionForDeposit
 } from 'sdk-brreeezze';
 
 const apiClient = new ApiClient('http://localhost:8080/');
-const fundData = await getFund(apiClient, 'fund_123', 'api_key');
+const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
+const userBalances = await getUserBalances(apiClient, 'api_key', 'user_id');
 ```
 
 ## Error Handling
@@ -331,16 +348,21 @@ The SDK is written in TypeScript and provides full type definitions:
 
 ```typescript
 import { 
-  FundData, 
-  UserInfo, 
+  UserYield,
+  UserBalances, 
   TransactionForDeposit,
-  InstructionsForDeposit,
-  UserValueInfo,
-  PartnerFundStatsInfo
+  InstructionsForDeposit
 } from 'sdk-brreeezze';
 
 // All API responses are properly typed
-const fund: FundData = await sdk.getFund('fund_123');
+const userYield: UserYield = await sdk.getUserYield({
+  userId: 'user_123'
+});
+
+const userBalances: UserBalances = await sdk.getUserBalances({
+  userId: 'user_123'
+});
+
 const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
   fundId: 'fund_123',
   amount: 100,
@@ -376,18 +398,14 @@ npx tsx examples/integration-flow-simple.ts
 The SDK interacts with these API endpoints:
 
 ### GET Endpoints
-- `GET /getfund/{fund_id}` - Get fund information
-- `GET /user/{user_id}` - Get user information  
-- `GET /uservalue/{user_id}` - Get user value (supports query params)
-- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics (supports query params)
-- `GET /fund/{base_asset}` - Get funds for base asset
-- `GET /partner/{organization_id}/stats?start=...&end=...` - Get partner fund statistics
+- `GET /user-yield/{user_id}` - Get user yield data (supports pagination and fund filtering)
+- `GET /user-balances/{user_id}` - Get user balance information (supports asset filtering and sorting)
 
 ### POST Endpoints  
 - `POST /deposit/tx` - Create deposit transaction (requires fundId, amount, userKey)
-- `POST /withdraw/tx` - Create withdraw transaction (requires fundId, shares, userKey)
-- `POST /deposit/ix` - Get deposit instructions (requires fundId, amount, userKey, returns array)
-- `POST /withdraw/ix` - Get withdraw instruction (requires fundId, shares, userKey, returns single instruction)
+- `POST /withdraw/tx` - Create withdraw transaction (requires fundId, amount, userKey)
+- `POST /deposit/ix` - Get deposit instructions (requires fundId, amount, userKey)
+- `POST /withdraw/ix` - Get withdraw instruction (requires fundId, amount, userKey)
 
 ## Development
 
@@ -412,12 +430,8 @@ src/
 ├── breeze-sdk.ts              # Main SDK class
 ├── builder.ts                 # ApiClient and error handling
 ├── index.ts                   # Main exports
-├── getFund/                   # Fund-related operations
-├── getUserInfo/               # User info operations
-├── getUserStats/              # User statistics
-├── getUserValue/              # User value operations  
-├── getFundsForBaseAsset/      # Base asset fund operations
-├── getPartnerFundStats/       # Partner statistics
+├── getUserYield/              # User yield operations
+├── getUserBalances/           # User balance operations
 ├── transactionForDeposit/     # Deposit transactions
 ├── transactionForWithdraw/    # Withdraw transactions
 ├── instructionsForDeposit/    # Deposit instructions

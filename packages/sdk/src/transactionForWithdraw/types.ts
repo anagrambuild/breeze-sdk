@@ -9,7 +9,7 @@ export type BodyForTxWithdraw = {
 
 type InputForWithdraw = {
   fund_id: string;
-  shares: number;
+  amount: number;
   all?: boolean;
   payer_key?: string;
   user_key: string;

@@ -1,10 +1,6 @@
 import { ApiClient, BreezeApiError } from './builder';
-import { getFund } from './getFund';
-import { getUserInfo } from './getUserInfo';
-import { getUserStats, QueryForGettingUserFundStats } from './getUserStats';
-import { getUserValue, QueryForGettingUserValue } from './getUserValue';
-import { getFundsForBaseAsset } from './getFundsForBaseAsset';
-import { getPartnerFundStats, QueryForGettingPartnerFundStats } from './getPartnerFundStats';
+import { getUserYield } from './getUserYield';
+import { getUserBalances } from './getUserBalances';
 import { getTransactionForDeposit } from './transactionForDeposit';
 import { getTransactionForWithdraw } from './transactionForWithdraw';
 import { getInstructionsForDeposit } from './instructionsForDeposit';
@@ -25,58 +21,36 @@ export class BreezeSDK {
     this.apiKey = config.apiKey;
   }
 
-  // Fund operations
-  async getFund(fundId: string) {
-    return getFund(this.apiClient, fundId, this.apiKey);
-  }
-
-  async getFundsForBaseAsset(baseAsset: string) {
-    return getFundsForBaseAsset(this.apiClient, baseAsset, this.apiKey);
-  }
-
-  // User operations
-  async getUserInfo(userId: string) {
-    return getUserInfo(this.apiClient, userId, this.apiKey);
-  }
-
-  async getUserValue(userId: string, options?: {
+  async getUserYield(options: {
+    userId: string;
     fundId?: string;
-    baseAsset?: string;
-    fiatValue?: string;
+    page?: number;
+    limit?: number;
   }) {
-    const query: QueryForGettingUserValue | undefined = options ? {
-      fund_id: options.fundId,
-      base_asset: options.baseAsset,
-      fiat_value: options.fiatValue
-    } : undefined;
-    return getUserValue(this.apiClient, userId, this.apiKey, query);
+    return getUserYield(
+      this.apiClient,
+      this.apiKey,
+      options.userId,
+      options.fundId,
+      options.page,
+      options.limit
+    );
   }
 
-  async getUserStats(userId: string, start: string, end: string, options?: {
-    fundId?: string;
-    baseAsset?: string;
-    fiatValue?: string;
+  async getUserBalances(options: {
+    userId: string;
+    asset?: string;
+    sortBy?: string;
+    sortOrder?: string;
   }) {
-    const query: Omit<QueryForGettingUserFundStats, 'start' | 'end'> | undefined = options ? {
-      fund_id: options.fundId,
-      base_asset: options.baseAsset,
-      fiat_value: options.fiatValue
-    } : undefined;
-    return getUserStats(this.apiClient, userId, this.apiKey, start, end, query);
-  }
-
-  // Partner operations
-  async getPartnerFundStats(organizationId: string, start: string, end: string, options?: {
-    organizationId?: string;
-    baseAsset?: string;
-    fiatValue?: string;
-  }) {
-    const query: Omit<QueryForGettingPartnerFundStats, 'start' | 'end'> | undefined = options ? {
-      organization_id: options.organizationId,
-      base_asset: options.baseAsset,
-      fiat_value: options.fiatValue
-    } : undefined;
-    return getPartnerFundStats(this.apiClient, organizationId, this.apiKey, start, end, query);
+    return getUserBalances(
+      this.apiClient,
+      this.apiKey,
+      options.userId,
+      options.asset,
+      options.sortBy,
+      options.sortOrder
+    );
   }
 
   // Transaction operations
@@ -100,7 +74,7 @@ export class BreezeSDK {
 
   async createWithdrawTransaction(options: {
     fundId: string;
-    shares: number;
+    amount: number;
     userKey: string;
     all?: boolean;
     payerKey?: string;
@@ -109,7 +83,7 @@ export class BreezeSDK {
       this.apiClient,
       this.apiKey,
       options.fundId,
-      options.shares,
+      options.amount,
       options.userKey,
       options.all,
       options.payerKey
@@ -136,7 +110,7 @@ export class BreezeSDK {
 
   async getWithdrawInstruction(options: {
     fundId: string;
-    shares: number;
+    amount: number;
     userKey: string;
     all?: boolean;
     payerKey?: string;
@@ -145,7 +119,7 @@ export class BreezeSDK {
       this.apiClient,
       this.apiKey,
       options.fundId,
-      options.shares,
+      options.amount,
       options.userKey,
       options.all,
       options.payerKey

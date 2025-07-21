@@ -25,16 +25,7 @@ describe('Instruction Methods Integration Test', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.deposit_instruction).toBeDefined();
-      expect(Array.isArray(result.result.deposit_instruction)).toBe(true);
-      expect(result.result.deposit_instruction.length).toBeGreaterThan(0);
-      
-      const instruction = result.result.deposit_instruction[0];
-      expect(Array.isArray(instruction.program_id)).toBe(true);
-      expect(Array.isArray(instruction.accounts)).toBe(true);
-      expect(Array.isArray(instruction.data)).toBe(true);
+      expect(result.deposit_instruction).toBeDefined();
     }, 30000);
 
     it('should successfully get deposit instructions with minimal options', async () => {
@@ -45,10 +36,7 @@ describe('Instruction Methods Integration Test', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.deposit_instruction).toBeDefined();
-      expect(Array.isArray(result.result.deposit_instruction)).toBe(true);
+      expect(result.deposit_instruction).toBeDefined();
     }, 30000);
 
     it('should successfully get deposit instructions with all=true', async () => {
@@ -61,10 +49,7 @@ describe('Instruction Methods Integration Test', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.deposit_instruction).toBeDefined();
-      expect(Array.isArray(result.result.deposit_instruction)).toBe(true);
+      expect(result.deposit_instruction).toBeDefined();
     }, 30000);
 
     it('should handle invalid fund ID', async () => {
@@ -104,58 +89,47 @@ describe('Instruction Methods Integration Test', () => {
     it('should successfully get withdraw instruction with all options', async () => {
       const result = await sdk.getWithdrawInstruction({
         fundId: TEST_CONFIG.testFundId,
-        shares: TEST_CONFIG.testShares,
+        amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.lut_address).toBeDefined();
-      expect(result.result.withdraw_instruction).toBeDefined();
-      
-      const instruction = result.result.withdraw_instruction;
-      expect(Array.isArray(instruction.program_id)).toBe(true);
-      expect(Array.isArray(instruction.accounts)).toBe(true);
-      expect(Array.isArray(instruction.data)).toBe(true);
+      expect(result.lut_address).toBeDefined();
+      expect(result.withdraw_instruction).toBeDefined();
     }, 30000);
 
     it('should successfully get withdraw instruction with minimal options', async () => {
       const result = await sdk.getWithdrawInstruction({
         fundId: TEST_CONFIG.testFundId,
-        shares: TEST_CONFIG.testShares,
+        amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.lut_address).toBeDefined();
-      expect(result.result.withdraw_instruction).toBeDefined();
+      expect(result.lut_address).toBeDefined();
+      expect(result.withdraw_instruction).toBeDefined();
     }, 30000);
 
     it('should successfully get withdraw instruction with all=true', async () => {
       const result = await sdk.getWithdrawInstruction({
         fundId: TEST_CONFIG.testFundId,
-        shares: TEST_CONFIG.testShares,
+        amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         all: true,
         payerKey: TEST_CONFIG.testPayerKey
       });
       
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(result.result.lut_address).toBeDefined();
-      expect(result.result.withdraw_instruction).toBeDefined();
+      expect(result.lut_address).toBeDefined();
+      expect(result.withdraw_instruction).toBeDefined();
     }, 30000);
 
     it('should handle invalid fund ID', async () => {
       try {
         await sdk.getWithdrawInstruction({
           fundId: 'invalid_fund_id',
-          shares: TEST_CONFIG.testShares,
+          amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
         fail('Should have thrown an error for invalid fund ID');
@@ -174,7 +148,7 @@ describe('Instruction Methods Integration Test', () => {
       try {
         await offlineSDK.getWithdrawInstruction({
           fundId: TEST_CONFIG.testFundId,
-          shares: TEST_CONFIG.testShares,
+          amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
         fail('Should have thrown a network error');

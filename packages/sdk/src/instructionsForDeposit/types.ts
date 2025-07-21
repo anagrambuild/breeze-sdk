@@ -1,8 +1,5 @@
 export default interface InstructionsForDeposit {
-  success: boolean;
-  result: {
-    deposit_instruction: DepositInstruction[];
-  };
+    deposit_instruction: object[];
 }
 
 export type BodyForDepositInstructions = {
@@ -17,14 +14,3 @@ type InputForDeposit = {
   user_key: string;
 };
 
-type DepositInstruction = {
-  program_id: number[];
-  accounts: AccountMeta[];
-  data: number[];
-};
-
-type AccountMeta = {
-  pubkey: number[];
-  is_signer: boolean;
-  is_writable: boolean;
-};
