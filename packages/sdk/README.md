@@ -317,24 +317,6 @@ Make sure your API key has access to the following endpoints:
 - `POST /deposit/ix` - Deposit instruction generation
 - `POST /withdraw/ix` - Withdraw instruction generation
 
-## Error Handling
-
-The SDK uses custom error types for better error handling:
-
-```typescript
-import { BreezeApiError } from 'breeze-sdk';
-
-try {
-  const fund = await sdk.getFund('invalid_fund_id');
-} catch (error) {
-  if (error instanceof BreezeApiError) {
-    console.error('API Error:', error.message);
-    console.error('Status:', error.status);
-    console.error('Code:', error.code);
-    console.error('Response:', error.response);
-  }
-}
-```
 
 ### Error Types
 
@@ -343,17 +325,6 @@ try {
   - `status?: number` - HTTP status code  
   - `code?: string` - Error code ('TIMEOUT', 'NETWORK_ERROR', etc.)
   - `response?: any` - Full error response from the API
-
-### Server Response Handling
-
-The SDK handles server response variations including typos:
-
-```typescript
-// The SDK automatically handles both "success" and "sucess" (server typo)
-if (response.success || response.sucess) {
-  // Handle successful response
-}
-```
 
 ## TypeScript Support
 
@@ -386,7 +357,7 @@ const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
 ## Testing
 
 ### Integration Tests
-Run integration tests against your real API server:
+Run integration tests against real API server:
 
 ```bash
 npm run test:integration
@@ -395,16 +366,7 @@ npm run test:integration
 ### Example Scripts
 Test the SDK with example scripts:
 
-```bash
-# Basic usage example
-npm run example:basic
-
-# Full integration flow with transaction execution
-npm run example:integration
-
-# Simple API demonstration (no transaction execution)
-npx tsx examples/integration-flow-simple.ts
-```
+Check the examples out, in the packages/sdk/examples
 
 ## API Endpoints
 
