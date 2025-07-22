@@ -57,7 +57,7 @@ Update the `CONFIG` object at the top of the file:
 const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
-  baseUrl: 'http://localhost:8080/',
+  baseUrl: 'https://api.breeze.baby/',
   
   // Solana Configuration  
   rpcUrl: 'https://api.mainnet-beta.solana.com',

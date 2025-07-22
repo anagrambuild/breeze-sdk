@@ -5,7 +5,7 @@ import { BreezeSDK } from '../src';
 const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
-  baseUrl: 'http://localhost:8080/',
+  baseUrl: 'https://api.breeze.baby/',
   
   // User Configuration
   userPublicKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',

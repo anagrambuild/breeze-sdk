@@ -5,17 +5,17 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install sdk-brreeezze
+npm install breeze-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'sdk-brreeezze';
+import { BreezeSDK } from 'breeze-sdk';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
-  baseUrl: 'http://localhost:8080/', // Your API base URL
+  baseUrl: 'https://api.breeze.baby/', // Your API base URL
   apiKey: 'your-api-key-here',
   timeout: 30000 // Optional: request timeout in milliseconds (default: 30000)
 });
@@ -41,7 +41,7 @@ new BreezeSDK(config: BreezeSDKConfig)
 
 **BreezeSDKConfig:**
 - `apiKey: string` - Your API authentication key (required)
-- `baseUrl?: string` - Base URL for the API (default: 'http://localhost:8080/')
+- `baseUrl?: string` - Base URL for the API (default: 'https://api.breeze.baby/')
 - `timeout?: number` - Request timeout in milliseconds (default: 30000)
 
 #### Methods
@@ -208,11 +208,11 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'sdk-brreeezze';
+import { BreezeSDK } from 'breeze-sdk';
 
 async function example() {
   const sdk = new BreezeSDK({
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'https://api.breeze.baby/',
     apiKey: 'your-api-key-here'
   });
 
@@ -297,19 +297,32 @@ import {
   getUserBalances,
   getInstructionsForDeposit,
   getTransactionForDeposit
-} from 'sdk-brreeezze';
+} from 'breeze-sdk';
 
-const apiClient = new ApiClient('http://localhost:8080/');
+const apiClient = new ApiClient('https://api.breeze.baby/');
 const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
 const userBalances = await getUserBalances(apiClient, 'api_key', 'user_id');
 ```
+
+## Required API Endpoint
+
+The SDK requires access to the Breeze API at:
+**Base URL:** `https://api.breeze.baby/`
+
+Make sure your API key has access to the following endpoints:
+- `GET /user-yield/{user_id}` - User yield data retrieval
+- `GET /user-balances/{user_id}` - User balance information
+- `POST /deposit/tx` - Deposit transaction creation
+- `POST /withdraw/tx` - Withdraw transaction creation
+- `POST /deposit/ix` - Deposit instruction generation
+- `POST /withdraw/ix` - Withdraw instruction generation
 
 ## Error Handling
 
 The SDK uses custom error types for better error handling:
 
 ```typescript
-import { BreezeApiError } from 'sdk-brreeezze';
+import { BreezeApiError } from 'breeze-sdk';
 
 try {
   const fund = await sdk.getFund('invalid_fund_id');
@@ -352,7 +365,7 @@ import {
   UserBalances, 
   TransactionForDeposit,
   InstructionsForDeposit
-} from 'sdk-brreeezze';
+} from 'breeze-sdk';
 
 // All API responses are properly typed
 const userYield: UserYield = await sdk.getUserYield({

@@ -4,7 +4,7 @@ import { BreezeSDK } from '../src';
 async function exampleUsage() {
   // Initialize the SDK
   const sdk = new BreezeSDK({
-    baseUrl: 'http://localhost:8080/', // Your API base URL
+    baseUrl: 'https://api.breeze.baby/', // Your API base URL
     apiKey: 'apy_key_here', // Use actual test API key
     timeout: 30000 // Optional: request timeout in milliseconds
   });
