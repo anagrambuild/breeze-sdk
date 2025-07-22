@@ -1,6 +1,6 @@
 {
-  "name": "@anagrambuild/breeze-sdk",
-  "version": "0.1.0",
+  "name": "@breezebaby/breeze-sdk",
+  "version": "1.0.0",
   "description": "Breeze SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -1,25 +1,6 @@
 # Integration Tests for Breeze SDK
 
-This folder contains comprehensive integration tests for all SDK methods. These tests are designed to send real HTTP requests to a localhost server and validate the responses or just use basic base url for all tests.
-
-## Test Structure
-
-- **test-config.ts**: Configuration file with test settings and helper functions
-- **getFund.test.ts**: Tests for `getFund` method
-- **getFundsForBaseAsset.test.ts**: Tests for `getFundsForBaseAsset` method
-- **getUserInfo.test.ts**: Tests for `getUserInfo` method
-- **getUserValue.test.ts**: Tests for `getUserValue` method with query params
-- **getUserStats.test.ts**: Tests for `getUserStats` method with query params
-- **getPartnerFundStats.test.ts**: Tests for `getPartnerFundStats` method with query params
-- **transactionMethods.test.ts**: Tests for `createDepositTransaction` and `createWithdrawTransaction`
-- **instructionMethods.test.ts**: Tests for `getDepositInstructions` and `getWithdrawInstruction`
-- **runAllTests.test.ts**: Comprehensive test runner and health check
-
-## Prerequisites
-
-1. **Server Setup**: Ensure you have a Breeze API server running on `http://localhost:8080`
-2. **Test Data**: The server should have test data available for the IDs configured in `test-config.ts`
-3. **API Key**: Update the `apiKey` in `test-config.ts` with a valid API key
+This folder contains comprehensive integration tests for all SDK methods. These tests are designed to send real HTTPS requests to a server and validate the responses or just use basic base url for all tests.
 
 ## Configuration
 
@@ -27,7 +8,7 @@ Edit `test-config.ts` to match your test environment:
 
 ```typescript
 export const TEST_CONFIG = {
-  baseUrl: 'http://localhost:8080',
+  baseUrl: 'http://api.breeze.baby/',
   apiKey: 'your_test_api_key',
   testUserId: 'test_user_123',
   testFundId: 'test_fund_456',

@@ -1,7 +1,7 @@
 // Test configuration for integration tests
 export const TEST_CONFIG = {
   baseUrl: 'https://api.breeze.baby/',
-  apiKey: 'apy_key_here',
+  apiKey: 'api_key_here',
   timeout: 10000,
   
   // Test data
