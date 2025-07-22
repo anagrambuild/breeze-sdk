@@ -5,19 +5,19 @@ export async function getTransactionForWithdraw(
   api_client: ApiClient,
   api_key: string,
   fund_id: string,
-  shares: number,
+  amount: number,
   user_key: string,
   all?: boolean,
   payer_key?: string
 ) {
   const headers: Record<string, string> = {
-    "api-key": api_key,
+    "x-api-key": api_key,
   };
   
   const body_content: BodyForTxWithdraw = {
     params: {
       fund_id,
-      shares,
+      amount: amount,
       user_key,
       all,
       payer_key,

@@ -109,10 +109,10 @@ Create a withdraw transaction with flexible parameters.
 ```typescript
 const withdrawTx = await sdk.createWithdrawTransaction({
   fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50, // Note: uses 'shares' not 'amount'
+  amount: 50, // Note: uses 'amount' not 'amount'
   userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
-  all: false // Optional: whether to withdraw all shares
+  all: false // Optional: whether to withdraw all amount
 });
 ```
 
@@ -134,7 +134,7 @@ Get Solana transaction instructions for withdrawals (for advanced users).
 ```typescript
 const withdrawIx = await sdk.getWithdrawInstructions({
   fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  shares: 50,
+  amount: 50,
   userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh'
 });
 // Returns detailed Solana instruction data with lookup table address

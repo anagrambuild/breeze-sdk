@@ -11,7 +11,7 @@ export async function getInstructionsForDeposit(
   payer_key?: string
 ) {
   const headers: Record<string, string> = {
-    "api-key": api_key,
+    "x-api-key": api_key,
   };
   
   const body_content: BodyForDepositInstructions = {

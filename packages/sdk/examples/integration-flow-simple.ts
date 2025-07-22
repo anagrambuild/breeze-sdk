@@ -4,23 +4,18 @@ import { BreezeSDK } from '../src';
 // Update these values with your actual configuration
 const CONFIG = {
   // API Configuration
-  apiKey: 'userkey_0000',
+  apiKey: 'apy_key_here',
   baseUrl: 'http://localhost:8080/',
   
   // User Configuration
-  userPublicKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
+  userPublicKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
   
   // Fund Configuration
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  organizationId: 'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
   
   // Transaction Configuration
   depositAmount: 100,
-  withdrawShares: 50,
-  
-  // Date range for stats
-  startDate: '2025-07-11T15:34:39.406Z',
-  endDate: '2025-07-13T19:34:39.406Z'
+  withdrawAmount: 50
 };
 
 // ===== HELPER FUNCTIONS =====
@@ -60,70 +55,68 @@ async function integrationFlowSimple() {
     
     logSuccess('SDK initialized successfully');
     
-    // ===== STEP 1: GET INITIAL USER VALUE =====
-    logSection('STEP 1: GET INITIAL USER VALUE');
+    // ===== STEP 1: GET USER YIELD DATA =====
+    logSection('STEP 1: GET USER YIELD DATA');
     
-    let initialUserValue;
     try {
-      initialUserValue = await sdk.getUserValue(CONFIG.userPublicKey, {
+      const userYield = await sdk.getUserYield({
+        userId: CONFIG.userPublicKey,
         fundId: CONFIG.fundId,
-        baseAsset: 'USDC'
+        page: 1,
+        limit: 10
       });
       
-      logSuccess('Retrieved initial user value');
-      console.log('Initial Value Response:', JSON.stringify(initialUserValue, null, 2));
+      logSuccess('Retrieved user yield data');
+      console.log('User Yield Response:', JSON.stringify(userYield, null, 2));
       
-      // Parse user value
-      if (initialUserValue.success || initialUserValue.success) {
-        const assets = Object.keys(initialUserValue.result);
-        if (assets.length > 0) {
-          const firstAsset = assets[0];
-          const values = initialUserValue.result[firstAsset];
-          if (values && values.length > 0) {
-            logInfo(`Initial ${firstAsset} value: ${values[0].base_asset_value}`);
-            logInfo(`Fund percentage: ${values[0].percent_of_fund}%`);
-            logInfo(`Total fund value: ${values[0].total_fund_value}`);
-          }
+      // Parse user yield
+      if (userYield && userYield.yields) {
+        logInfo(`Total yield earned: ${userYield.total_yield_earned}`);
+        logInfo(`Number of yield records: ${userYield.yields.length}`);
+        logInfo(`Current page: ${userYield.pagination.page} of ${userYield.pagination.total_pages}`);
+        
+        if (userYield.yields.length > 0) {
+          const latestYield = userYield.yields[0];
+          logInfo(`Latest yield from fund: ${latestYield.fund_name}`);
+          logInfo(`Position value: ${latestYield.position_value}`);
+          logInfo(`Yield earned: ${latestYield.yield_earned}`);
+          logInfo(`APY: ${latestYield.apy}`);
         }
       }
     } catch (error) {
-      logError('Failed to get initial user value', error);
+      logError('Failed to get user yield data', error);
     }
     
-    // ===== STEP 2: GET PARTNER STATS =====
-    logSection('STEP 2: GET PARTNER FUND STATISTICS');
+    // ===== STEP 2: GET USER BALANCES =====
+    logSection('STEP 2: GET USER BALANCES');
     
     try {
-      const partnerStats = await sdk.getPartnerFundStats(
-        CONFIG.organizationId,
-        CONFIG.startDate,
-        CONFIG.endDate,
-        {
-          baseAsset: 'USDC'
-        }
-      );
+      const userBalances = await sdk.getUserBalances({
+        userId: CONFIG.userPublicKey,
+        asset: 'USDC',
+        sortBy: 'balance',
+        sortOrder: 'desc'
+      });
       
-      logSuccess('Retrieved partner fund statistics');
-      console.log('Partner Stats Response:', JSON.stringify(partnerStats, null, 2));
+      logSuccess('Retrieved user balances');
+      console.log('User Balances Response:', JSON.stringify(userBalances, null, 2));
       
-      // Parse partner stats
-      if ((partnerStats.success || partnerStats.success) && partnerStats.result.length > 0) {
-        const stats = partnerStats.result[0];
-        logInfo(`Fund ID: ${stats.meta.fund_id}`);
-        logInfo(`Base Asset: ${stats.meta.base_asset}`);
-        logInfo(`Time range: ${stats.meta.start} to ${stats.meta.end}`);
-        logInfo(`Granularity: ${stats.meta.granularity}`);
-        logInfo(`Data points: ${stats.time_stamps.length}`);
+      // Parse user balances
+      if (userBalances && userBalances.balances) {
+        logInfo(`Total portfolio value: ${userBalances.total_portfolio_value}`);
+        logInfo(`Total yield earned: ${userBalances.total_yield_earned}`);
+        logInfo(`Number of balance records: ${userBalances.balances.length}`);
         
-        if (stats.base_asset_value.length > 0) {
-          const latestValue = stats.base_asset_value[stats.base_asset_value.length - 1];
-          const latestYield = stats.yeild_percentage[stats.yeild_percentage.length - 1];
-          logInfo(`Latest value: ${latestValue}`);
-          logInfo(`Latest yield: ${latestYield}%`);
-        }
+        userBalances.balances.forEach((balance, index) => {
+          logInfo(`Asset ${index + 1}: ${balance.asset} (${balance.symbol})`);
+          logInfo(`  - Wallet balance: ${balance.wallet_balance}`);
+          logInfo(`  - Total balance: ${balance.total_balance}`);
+          logInfo(`  - Total yield: ${balance.total_yield}`);
+          logInfo(`  - Fund positions: ${balance.fund_positions.length}`);
+        });
       }
     } catch (error) {
-      logError('Failed to get partner statistics', error);
+      logError('Failed to get user balances', error);
     }
     
     // ===== STEP 3: CREATE DEPOSIT TRANSACTION (GET TRANSACTION DATA) =====
@@ -138,7 +131,7 @@ async function integrationFlowSimple() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (depositTxData.success || depositTxData.success) {
+      if (depositTxData.success) {
         logSuccess('Deposit transaction created successfully');
         logInfo(`Transaction data (base64): ${depositTxData.result.substring(0, 100)}...`);
         logInfo(`Transaction length: ${depositTxData.result.length} characters`);
@@ -158,55 +151,18 @@ async function integrationFlowSimple() {
       logError('Failed to create deposit transaction', error);
     }
     
-    // ===== STEP 4: GET USER STATISTICS =====
-    logSection('STEP 4: GET USER STATISTICS');
+    // ===== STEP 4: CREATE WITHDRAW TRANSACTION (GET TRANSACTION DATA) =====
+    logSection('STEP 4: CREATE WITHDRAW TRANSACTION');
     
     try {
-      const userStats = await sdk.getUserStats(
-        CONFIG.userPublicKey,
-        CONFIG.startDate,
-        CONFIG.endDate,
-        {
-          fundId: CONFIG.fundId,
-          baseAsset: 'USDC'
-        }
-      );
-      
-      logSuccess('Retrieved user statistics');
-      console.log('User Stats Response:', JSON.stringify(userStats, null, 2));
-      
-      // Parse user stats
-      if ((userStats.success || userStats.success) && userStats.result.length > 0) {
-        const stats = userStats.result[0];
-        logInfo(`Fund ID: ${stats.meta.fund_id}`);
-        logInfo(`Base Asset: ${stats.meta.base_asset}`);
-        logInfo(`Time range: ${stats.meta.start} to ${stats.meta.end}`);
-        logInfo(`Granularity: ${stats.meta.granularity}`);
-        logInfo(`Data points: ${stats.time_stamps.length}`);
-        
-        if (stats.base_asset_value.length > 0) {
-          const latestValue = stats.base_asset_value[stats.base_asset_value.length - 1];
-          const latestYield = stats.yeild_percentage[stats.yeild_percentage.length - 1];
-          logInfo(`Latest value: ${latestValue}`);
-          logInfo(`Latest yield: ${latestYield}%`);
-        }
-      }
-    } catch (error) {
-      logError('Failed to get user statistics', error);
-    }
-    
-    // ===== STEP 5: CREATE WITHDRAW TRANSACTION (GET TRANSACTION DATA) =====
-    logSection('STEP 5: CREATE WITHDRAW TRANSACTION');
-    
-    try {
-      logInfo(`Creating withdraw transaction for ${CONFIG.withdrawShares} shares...`);
+      logInfo(`Creating withdraw transaction for ${CONFIG.withdrawAmount} tokens...`);
       const withdrawTxData = await sdk.createWithdrawTransaction({
         fundId: CONFIG.fundId,
-        shares: CONFIG.withdrawShares,
+        amount: CONFIG.withdrawAmount,
         userKey: CONFIG.userPublicKey
       });
       
-      if (withdrawTxData.success || withdrawTxData.success) {
+      if (withdrawTxData.success) {
         logSuccess('Withdraw transaction created successfully');
         logInfo(`Transaction data (base64): ${withdrawTxData.result.substring(0, 100)}...`);
         logInfo(`Transaction length: ${withdrawTxData.result.length} characters`);
@@ -226,8 +182,8 @@ async function integrationFlowSimple() {
       logError('Failed to create withdraw transaction', error);
     }
     
-    // ===== STEP 6: DEMONSTRATE INSTRUCTION METHODS =====
-    logSection('STEP 6: GET TRANSACTION INSTRUCTIONS');
+    // ===== STEP 5: DEMONSTRATE INSTRUCTION METHODS =====
+    logSection('STEP 5: GET TRANSACTION INSTRUCTIONS');
     
     try {
       // Get deposit instructions
@@ -238,35 +194,21 @@ async function integrationFlowSimple() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (depositInstructions.success || depositInstructions.success) {
-        logSuccess('Retrieved deposit instructions');
-        const instructions = depositInstructions.result.deposit_instruction;
-        logInfo(`Number of instructions: ${instructions.length}`);
-        
-        instructions.forEach((instruction, index) => {
-          logInfo(`Instruction ${index + 1}:`);
-          logInfo(`  - Program ID: [${instruction.program_id[0]}, ${instruction.program_id[1]}, ...]`);
-          logInfo(`  - Accounts: ${instruction.accounts.length}`);
-          logInfo(`  - Data length: ${instruction.data.length}`);
-        });
-      }
+      logSuccess('Retrieved deposit instructions');
+      logInfo(`Has deposit instructions: ${!!depositInstructions.deposit_instruction}`);
+      logInfo(`Deposit instruction type: ${typeof depositInstructions.deposit_instruction}`);
       
       // Get withdraw instruction
       logInfo('Getting withdraw instruction...');
       const withdrawInstruction = await sdk.getWithdrawInstruction({
         fundId: CONFIG.fundId,
-        shares: CONFIG.withdrawShares,
+        amount: CONFIG.withdrawAmount,
         userKey: CONFIG.userPublicKey
       });
       
-      if (withdrawInstruction.success || withdrawInstruction.success) {
-        logSuccess('Retrieved withdraw instruction');
-        const instruction = withdrawInstruction.result.withdraw_instruction;
-        logInfo(`Lookup table address: ${withdrawInstruction.result.lut_address}`);
-        logInfo(`Program ID: [${instruction.program_id[0]}, ${instruction.program_id[1]}, ...]`);
-        logInfo(`Accounts: ${instruction.accounts.length}`);
-        logInfo(`Data length: ${instruction.data.length}`);
-      }
+      logSuccess('Retrieved withdraw instruction');
+      logInfo(`Lookup table address: ${withdrawInstruction.lut_address}`);
+      logInfo(`Withdraw instruction type: ${typeof withdrawInstruction.withdraw_instruction}`);
       
     } catch (error) {
       logError('Failed to get transaction instructions', error);
@@ -287,10 +229,8 @@ console.log('🚀 Starting Breeze SDK Integration Flow (Simple Version)...');
 console.log('📋 Configuration:');
 console.log(`   API URL: ${CONFIG.baseUrl}`);
 console.log(`   Fund ID: ${CONFIG.fundId}`);
-console.log(`   Organization ID: ${CONFIG.organizationId}`);
 console.log(`   User: ${CONFIG.userPublicKey}`);
 console.log(`   Deposit Amount: ${CONFIG.depositAmount}`);
-console.log(`   Withdraw Shares: ${CONFIG.withdrawShares}`);
-console.log(`   Date Range: ${CONFIG.startDate} to ${CONFIG.endDate}`);
+console.log(`   Withdraw Amount: ${CONFIG.withdrawAmount}`);
 
 integrationFlowSimple().catch(console.error);

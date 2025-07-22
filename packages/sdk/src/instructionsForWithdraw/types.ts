@@ -1,9 +1,6 @@
 export default interface InstructionsForWithdraw {
-  success: boolean;
-  result: {
     lut_address: string;
-    withdraw_instruction: WithdrawInstruction;
-  };
+    withdraw_instruction: object;
 }
 
 export type BodyForWithdrawInstructions = {
@@ -12,20 +9,9 @@ export type BodyForWithdrawInstructions = {
 
 type InputForWithdraw = {
   fund_id: string;
-  shares: number;
+  amount: number;
   all?: boolean;
   payer_key?: string;
   user_key: string;
 };
 
-type WithdrawInstruction = {
-  program_id: number[];
-  accounts: AccountMeta[];
-  data: number[];
-};
-
-type AccountMeta = {
-  pubkey: number[];
-  is_signer: boolean;
-  is_writable: boolean;
-};

@@ -1,20 +1,16 @@
 // Test configuration for integration tests
 export const TEST_CONFIG = {
   baseUrl: 'http://localhost:8080/',
-  apiKey: 'userkey_0000',
+  apiKey: 'apy_key_here',
   timeout: 10000,
   
   // Test data
-  testUserId: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
-  testFundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
-  testOrganizationId: 'org_2z9UJxhyNmCvOpHScFKyBZrqEdy',
+  testUserId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  testFundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
   testBaseAsset: 'USDC',
   testAmount: 100,
-  testShares: 100,
-  testPayerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
-  testUserKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh',
-  testStartDate: '2025-07-11T15:34:39.406Z',
-  testEndDate: '2025-07-13T19:34:39.406Z'
+  testPayerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  testUserKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
 };
 
 // Helper function to wait for server
@@ -27,7 +23,7 @@ export const waitForServer = async (baseUrl: string, timeout: number = 30000): P
       const response = await fetch(`${baseUrl}/`, { 
         method: 'GET',
         headers: {
-          'api-key': TEST_CONFIG.apiKey
+          'x-api-key': TEST_CONFIG.apiKey
         }
       });
       // If we get any response, the server is running

@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  name : "sdk-breeeze",
+  name : "breeze-sdk",
   entry: ["src/index.ts"],
   format: ["esm"],
   dts: true,
