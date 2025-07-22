@@ -12,7 +12,7 @@ async function exampleUsage() {
   try {
     // Get user yield data (NEW METHOD)
     const userYield = await sdk.getUserYield({
-      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Optional filter
       page: 1,
       limit: 10
@@ -21,7 +21,7 @@ async function exampleUsage() {
     
     // Get user balances (NEW METHOD)
     const userBalances = await sdk.getUserBalances({
-      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       asset: 'USDC', // Optional filter
       sortBy: 'balance',
       sortOrder: 'desc'
@@ -32,7 +32,7 @@ async function exampleUsage() {
     const depositTx = await sdk.createDepositTransaction({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
       amount: 100, // Required
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
       all: false // Optional: whether to deposit all available funds
     });
     console.log('Deposit transaction:', depositTx);
@@ -41,7 +41,7 @@ async function exampleUsage() {
     const withdrawTx = await sdk.createWithdrawTransaction({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
       amount: 50, // Required
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
       all: false // Optional: whether to withdraw all amount
     });
     console.log('Withdraw transaction:', withdrawTx);
@@ -50,7 +50,7 @@ async function exampleUsage() {
     const depositInstructions = await sdk.getDepositInstructions({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
     console.log('Deposit instructions:', depositInstructions);
     console.log('Has deposit instructions:', !!depositInstructions.deposit_instruction);
@@ -59,7 +59,7 @@ async function exampleUsage() {
     const withdrawInstruction = await sdk.getWithdrawInstruction({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 50,
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
     console.log('Withdraw instruction:', withdrawInstruction.withdraw_instruction);
     console.log('Lookup table address:', withdrawInstruction.lut_address);

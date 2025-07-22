@@ -14,7 +14,7 @@ const CONFIG = {
   
   // User Configuration
   privateKey: 'your_private_key', // Base58 encoded private key
-  userPublicKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Should match private key
+  userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Should match private key
   
   // Fund Configuration
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',

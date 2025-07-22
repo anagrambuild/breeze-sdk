@@ -64,7 +64,7 @@ const CONFIG = {
   
   // User Configuration
   privateKey: 'YOUR_PRIVATE_KEY_BASE58_HERE', // Base58 encoded private key
-  userPublicKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   
   // Fund Configuration
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
@@ -155,7 +155,7 @@ The examples provide detailed logging:
 📋 Configuration:
    API URL: https://api.breeze.baby/
    Fund ID: 8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV
-   User: HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep
+   User: 7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY
 
 ==================================================
 🔄 STEP 1: GET USER YIELD DATA

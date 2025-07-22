@@ -22,7 +22,7 @@ const sdk = new BreezeSDK({
 
 // Get user yield data
 const userYield = await sdk.getUserYield({
-  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+  userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
 });
 console.log('Total yield earned:', userYield.total_yield_earned);
 ```
@@ -54,12 +54,12 @@ Get user yield data with pagination and fund filtering.
 ```typescript
 // Basic usage
 const userYield = await sdk.getUserYield({
-  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+  userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
 });
 
 // With optional parameters
 const userYield = await sdk.getUserYield({
-  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Optional filter
   page: 1,      // Optional pagination
   limit: 10     // Optional pagination
@@ -95,12 +95,12 @@ Get user balance information with asset filtering and sorting.
 ```typescript
 // Basic usage
 const userBalances = await sdk.getUserBalances({
-  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+  userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
 });
 
 // With optional parameters
 const userBalances = await sdk.getUserBalances({
-  userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   asset: 'USDC',        // Optional filter
   sortBy: 'balance',    // Optional sorting
   sortOrder: 'desc'     // Optional sort order
@@ -154,8 +154,8 @@ Create a withdraw transaction. **Required parameters**: `fundId`, `amount`, `use
 const withdrawTx = await sdk.createWithdrawTransaction({
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
   amount: 50, // Required
-  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
-  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
+  userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
+  payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
   all: false // Optional: whether to withdraw all amount
 });
 // Returns: { success: true, result: "base64-encoded-transaction" }
@@ -168,8 +168,8 @@ Get Solana transaction instructions for deposits. **Required parameters**: `fund
 const depositIx = await sdk.getDepositInstructions({
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
   amount: 100, // Required
-  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
-  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
+  userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
+  payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
   all: false // Optional
 });
 // Returns: { deposit_instruction: [instruction_objects] }
@@ -182,8 +182,8 @@ Get Solana transaction instruction for withdrawals. **Required parameters**: `fu
 const withdrawIx = await sdk.getWithdrawInstruction({
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
   amount: 50, // Required
-  userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Required
-  payerKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep', // Optional
+  userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
+  payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
   all: false // Optional
 });
 // Returns: { lut_address: "...", withdraw_instruction: instruction_object }
@@ -219,7 +219,7 @@ async function example() {
   try {
     // 1. Get user yield data
     const userYield = await sdk.getUserYield({
-      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       page: 1,
       limit: 10
     });
@@ -228,7 +228,7 @@ async function example() {
 
     // 2. Get user balances
     const userBalances = await sdk.getUserBalances({
-      userId: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+      userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       asset: 'USDC',
       sortBy: 'balance',
       sortOrder: 'desc'
@@ -240,7 +240,7 @@ async function example() {
     const deposit = await sdk.createDepositTransaction({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
     console.log('Deposit transaction created:', deposit.success);
 
@@ -248,7 +248,7 @@ async function example() {
     const instructions = await sdk.getDepositInstructions({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
-      userKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep'
+      userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
     console.log('Has instructions:', !!instructions.deposit_instruction);
 

@@ -8,7 +8,7 @@ const CONFIG = {
   baseUrl: 'https://api.breeze.baby/',
   
   // User Configuration
-  userPublicKey: 'HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep',
+  userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   
   // Fund Configuration
   fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
