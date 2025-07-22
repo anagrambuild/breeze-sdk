@@ -5,17 +5,17 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install sdk-breeeze
+npm install breeze-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'breeze-sdk';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
-  baseUrl: 'http://localhost:8080/', // Your API base URL
+  baseUrl: 'https://https://api.breeze.baby/', // Your API base URL
   apiKey: 'your-api-key-here',
   timeout: 30000 // Optional: request timeout in milliseconds (default: 30000)
 });
@@ -39,7 +39,7 @@ new BreezeSDK(config: BreezeSDKConfig)
 
 **BreezeSDKConfig:**
 - `apiKey: string` - Your API authentication key (required)
-- `baseUrl?: string` - Base URL for the API (default: 'http://localhost:8080/')
+- `baseUrl?: string` - Base URL for the API (default: 'https://api.breeze.baby/')
 - `timeout?: number` - Request timeout in milliseconds (default: 30000)
 
 #### Methods
@@ -169,11 +169,11 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'sdk-breeeze';
+import { BreezeSDK } from 'breeze-sdk';
 
 async function example() {
   const sdk = new BreezeSDK({
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'https://api.breeze.baby/',
     apiKey: 'userkey_0000'
   });
 
@@ -221,9 +221,9 @@ import {
   getFund, 
   createUserFund,
   getInstructionsForDeposit 
-} from 'sdk-breeeze';
+} from 'breeze-sdk';
 
-const apiClient = new ApiClient('http://localhost:8080/');
+const apiClient = new ApiClient('https://api.breeze.baby/');
 const fundData = await getFund(apiClient, 'fund_123', 'api_key');
 ```
 
@@ -232,7 +232,7 @@ const fundData = await getFund(apiClient, 'fund_123', 'api_key');
 The SDK uses custom error types for better error handling:
 
 ```typescript
-import { BreezeApiError } from 'sdk-breeeze';
+import { BreezeApiError } from 'breeze-sdk';
 
 try {
   const fund = await sdk.getFund('invalid_fund_id');
@@ -265,7 +265,7 @@ import {
   TransactionForDeposit,
   InstructionsForDeposit,
   CreateUserFundResponse 
-} from 'sdk-breeeze';
+} from 'breeze-sdk';
 
 // All API responses are properly typed
 const fund: FundData = await sdk.getFund('fund_123');
@@ -280,7 +280,7 @@ const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
 ### Integration Tests
 Run integration tests against your real API server:
 
-1. First, ensure your Rust API server is running on `localhost:8080`
+1. First, ensure your Rust API server is running on `localhost:8080` or you are using default base url
 2. Update the test configuration in all tests with valid IDs
 3. Run the tests:
 
@@ -306,14 +306,10 @@ node test_other_get_reqs.js
 The SDK interacts with these API endpoints:
 
 ### GET Endpoints
-- `GET /getfund/{fund_id}` - Get fund information
-- `GET /user/{user_id}` - Get user information  
-- `GET /userfunds/{user_id}` - Get user funds
-- `GET /uservalue/{user_id}` - Get user value
-- `GET /userstats/{user_id}?start=...&end=...` - Get user statistics
+- `GET /user-yield/{user_id}` - User yield data retrieval
+- `GET /user-balances/{user_id}` - User balance information 
 
 ### POST Endpoints  
-- `POST /create_user_fund/tx` - Create user fund association
 - `POST /deposit/tx` - Create deposit transaction
 - `POST /withdraw/tx` - Create withdraw transaction
 - `POST /deposit/ix` - Get deposit instructions
@@ -325,23 +321,4 @@ The SDK interacts with these API endpoints:
 
 ```bash
 npm run build
-```
-
-### Project Structure
-
-```
-src/
-├── breeze-sdk.ts              # Main SDK class
-├── builder.ts                 # ApiClient and error handling
-├── index.ts                   # Main exports
-├── getFund/                   # Fund-related operations
-├── getUserInfo/               # User info operations
-├── getUserFund/               # User fund operations
-├── getUserStats/              # User statistics
-├── getUserValue/              # User value operations  
-├── transactionForDeposit/     # Deposit transactions
-├── transactionForWithdraw/    # Withdraw transactions
-├── instructionsForDeposit/    # Deposit instructions
-├── instructionsForWithdraw/   # Withdraw instructions
-└── createUserFund/            # User fund creation
 ```
