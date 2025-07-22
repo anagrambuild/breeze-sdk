@@ -7,7 +7,7 @@ import bs58 from 'bs58';
 const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
-  baseUrl: 'http://localhost:8080/',
+  baseUrl: 'https://api.breeze.baby/',
   
   // Solana Configuration  
   rpcUrl: 'https://api.mainnet-beta.solana.com',

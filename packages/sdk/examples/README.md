@@ -57,7 +57,7 @@ Update the `CONFIG` object at the top of the file:
 const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
-  baseUrl: 'http://localhost:8080/',
+  baseUrl: 'https://api.breeze.baby/',
   
   // Solana Configuration  
   rpcUrl: 'https://api.mainnet-beta.solana.com',
@@ -153,7 +153,7 @@ The examples provide detailed logging:
 ```
 🚀 Starting Breeze SDK Integration Flow...
 📋 Configuration:
-   API URL: http://localhost:8080/
+   API URL: https://api.breeze.baby/
    Fund ID: 8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV
    User: HN1tpS7DRzNnRYXGffww3KYS6svPE8Qaw3ZCArkXy9Ep
 

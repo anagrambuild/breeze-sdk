@@ -17,7 +17,7 @@ export class BreezeSDK {
   private apiKey: string;
 
   constructor(config: BreezeSDKConfig) {
-    this.apiClient = new ApiClient(config.baseUrl, config.timeout);
+    this.apiClient = new ApiClient(config.baseUrl || 'https://api.breeze.baby/', config.timeout);
     this.apiKey = config.apiKey;
   }
 

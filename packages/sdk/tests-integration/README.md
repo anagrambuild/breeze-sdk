@@ -1,6 +1,6 @@
 # Integration Tests for Breeze SDK
 
-This folder contains comprehensive integration tests for all SDK methods. These tests are designed to send real HTTP requests to a localhost server and validate the responses.
+This folder contains comprehensive integration tests for all SDK methods. These tests are designed to send real HTTP requests to a localhost server and validate the responses or just use basic base url for all tests.
 
 ## Test Structure
 

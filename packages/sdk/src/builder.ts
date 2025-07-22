@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:8080/';
+export const BASE_URL = 'https://api.breeze.baby/';
 
 export interface RequestOptions {
   headers?: Record<string, string>;
