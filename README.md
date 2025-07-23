@@ -5,13 +5,13 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install breeze-sdk
+npm install @breezebaby/breeze-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'breeze-sdk';
+import { BreezeSDK } from '@breezebaby/breeze-sdk';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
@@ -208,7 +208,7 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'breeze-sdk';
+import { BreezeSDK } from '@breezebaby/breeze-sdk';
 
 async function example() {
   const sdk = new BreezeSDK({
@@ -297,7 +297,7 @@ import {
   getUserBalances,
   getInstructionsForDeposit,
   getTransactionForDeposit
-} from 'breeze-sdk';
+} from '@breezebaby/breeze-sdk';
 
 const apiClient = new ApiClient('https://api.breeze.baby/');
 const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
@@ -336,7 +336,7 @@ import {
   UserBalances, 
   TransactionForDeposit,
   InstructionsForDeposit
-} from 'breeze-sdk';
+} from '@breezebaby/breeze-sdk';
 
 // All API responses are properly typed
 const userYield: UserYield = await sdk.getUserYield({
