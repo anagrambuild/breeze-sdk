@@ -15,8 +15,8 @@ export { getInstructionForWithdraw } from './instructionsForWithdraw';
 // Type exports
 export type { default as UserYield } from './getUserYield/types';
 export type { default as UserBalances } from './getUserBalances/types';
-export type { default as TransactionForDeposit, BodyForTxDeposit } from './transactionForDeposit/types';
-export type { default as TransactionForWithdraw, BodyForTxWithdraw } from './transactionForWithdraw/types';
+export type { TransactionForDeposit, BodyForTxDeposit } from './transactionForDeposit/types';
+export type { TransactionForWithdraw, BodyForTxWithdraw } from './transactionForWithdraw/types';
 export type { default as InstructionsForDeposit, BodyForDepositInstructions } from './instructionsForDeposit/types';
 export type { default as InstructionsForWithdraw, BodyForWithdrawInstructions } from './instructionsForWithdraw/types';
 

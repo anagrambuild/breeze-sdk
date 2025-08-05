@@ -24,7 +24,9 @@ async function exampleUsage() {
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       asset: 'USDC', // Optional filter
       sortBy: 'balance',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
+      page: 1, // Optional pagination
+      limit: 10 // Optional pagination
     });
     console.log('User balances:', userBalances);
 

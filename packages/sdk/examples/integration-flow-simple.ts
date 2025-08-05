@@ -70,13 +70,13 @@ async function integrationFlowSimple() {
       console.log('User Yield Response:', JSON.stringify(userYield, null, 2));
       
       // Parse user yield
-      if (userYield && userYield.yields) {
-        logInfo(`Total yield earned: ${userYield.total_yield_earned}`);
-        logInfo(`Number of yield records: ${userYield.yields.length}`);
-        logInfo(`Current page: ${userYield.pagination.page} of ${userYield.pagination.total_pages}`);
+      if (userYield && userYield.data) {
+        logInfo(`Number of yield records: ${userYield.data.length}`);
+        logInfo(`Page: ${userYield.meta.page} of ${userYield.meta.total_pages}`);
+        logInfo(`Total yield records: ${userYield.meta.total}`);
         
-        if (userYield.yields.length > 0) {
-          const latestYield = userYield.yields[0];
+        if (userYield.data.length > 0) {
+          const latestYield = userYield.data[0];
           logInfo(`Latest yield from fund: ${latestYield.fund_name}`);
           logInfo(`Position value: ${latestYield.position_value}`);
           logInfo(`Yield earned: ${latestYield.yield_earned}`);
@@ -95,24 +95,30 @@ async function integrationFlowSimple() {
         userId: CONFIG.userPublicKey,
         asset: 'USDC',
         sortBy: 'balance',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
+        page: 1,
+        limit: 10
       });
       
       logSuccess('Retrieved user balances');
       console.log('User Balances Response:', JSON.stringify(userBalances, null, 2));
       
       // Parse user balances
-      if (userBalances && userBalances.balances) {
-        logInfo(`Total portfolio value: ${userBalances.total_portfolio_value}`);
-        logInfo(`Total yield earned: ${userBalances.total_yield_earned}`);
-        logInfo(`Number of balance records: ${userBalances.balances.length}`);
+      if (userBalances && userBalances.data) {
+        logInfo(`Number of balance records: ${userBalances.data.length}`);
+        logInfo(`Page: ${userBalances.meta.page} of ${userBalances.meta.total_pages}`);
+        logInfo(`Total balance records: ${userBalances.meta.total}`);
         
-        userBalances.balances.forEach((balance, index) => {
-          logInfo(`Asset ${index + 1}: ${balance.asset} (${balance.symbol})`);
-          logInfo(`  - Wallet balance: ${balance.wallet_balance}`);
+        userBalances.data.forEach((balance, index) => {
+          logInfo(`Asset ${index + 1}: ${balance.token_symbol} (${balance.token_name})`);
+          logInfo(`  - Token address: ${balance.token_address}`);
           logInfo(`  - Total balance: ${balance.total_balance}`);
-          logInfo(`  - Total yield: ${balance.total_yield}`);
-          logInfo(`  - Fund positions: ${balance.fund_positions.length}`);
+          logInfo(`  - Decimals: ${balance.decimals}`);
+          if (balance.yield_balance) {
+            logInfo(`  - Yield funds: ${balance.yield_balance.funds}`);
+            logInfo(`  - Yield amount: ${balance.yield_balance.amount_of_yield}`);
+            logInfo(`  - Fund APY: ${balance.yield_balance.fund_apy}`);
+          }
         });
       }
     } catch (error) {
@@ -131,10 +137,10 @@ async function integrationFlowSimple() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (depositTxData.success) {
+      if (typeof depositTxData === 'string') {
         logSuccess('Deposit transaction created successfully');
-        logInfo(`Transaction data (base64): ${depositTxData.result.substring(0, 100)}...`);
-        logInfo(`Transaction length: ${depositTxData.result.length} characters`);
+        logInfo(`Transaction data (base64): ${depositTxData.substring(0, 100)}...`);
+        logInfo(`Transaction length: ${depositTxData.length} characters`);
         
         // You can save this transaction data and sign it externally
         logInfo('💡 To execute this transaction:');
@@ -162,10 +168,10 @@ async function integrationFlowSimple() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (withdrawTxData.success) {
+      if (typeof withdrawTxData === 'string') {
         logSuccess('Withdraw transaction created successfully');
-        logInfo(`Transaction data (base64): ${withdrawTxData.result.substring(0, 100)}...`);
-        logInfo(`Transaction length: ${withdrawTxData.result.length} characters`);
+        logInfo(`Transaction data (base64): ${withdrawTxData.substring(0, 100)}...`);
+        logInfo(`Transaction length: ${withdrawTxData.length} characters`);
         
         // You can save this transaction data and sign it externally
         logInfo('💡 To execute this transaction:');

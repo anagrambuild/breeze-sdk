@@ -1,7 +1,6 @@
-export default interface TransactionForDeposit {
-  success: boolean;
-  result: string;
-}
+export type TransactionForDeposit =
+    | string // when the response is just the serialized transaction
+    | { message: string }; // when there's an error
 
 export type BodyForTxDeposit = {
   params: InputForDeposit;

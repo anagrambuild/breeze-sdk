@@ -5,13 +5,13 @@ A comprehensive TypeScript SDK for interacting with the Breeze API, providing a 
 ## Installation
 
 ```bash
-npm install breeze-sdk
+npm install @breezebaby/breeze-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { BreezeSDK } from 'breeze-sdk';
+import { BreezeSDK } from '@breezebaby/breeze-sdk';
 
 // Initialize the SDK
 const sdk = new BreezeSDK({
@@ -67,25 +67,25 @@ const userYield = await sdk.getUserYield({
 
 // Returns:
 // {
-//   "yields": [
-//     {
-//       "fund_id": "fund_123",
-//       "fund_name": "USDC Yield Fund",
-//       "base_asset": "USDC",
-//       "position_value": "500.00",
-//       "yield_earned": "25.50",
-//       "apy": "5.10",
-//       "entry_date": "2024-01-15T10:30:00Z",
-//       "last_updated": "2024-01-20T14:45:00Z"
-//     }
-//   ],
-//   "pagination": {
-//     "page": 1,
-//     "limit": 10,
-//     "total_items": 1,
-//     "total_pages": 1
-//   },
-//   "total_yield_earned": "25.50"
+// 	"data": [
+// 		{
+// 			"fund_id": "8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3Cysk",
+// 			"fund_name": "Fund 8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3Cysk",
+// 			"base_asset": "USDC",
+// 			"position_value": 1000005,
+// 			"yield_earned": 5,
+// 			"apy": 6.614188643106429,
+// 			"entry_date": "2025-08-05T13:28:21+00:00",
+// 			"last_updated": "2025-08-05T13:28:21+00:00"
+// 		}
+// 	],
+// 	"meta": {
+// 		"page": 1,
+// 		"per_page": 10,
+// 		"total": 1,
+// 		"total_pages": 1,
+// 		"has_more": false
+// 	}
 // }
 ```
 
@@ -103,31 +103,51 @@ const userBalances = await sdk.getUserBalances({
   userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   asset: 'USDC',        // Optional filter
   sortBy: 'balance',    // Optional sorting
-  sortOrder: 'desc'     // Optional sort order
+  sortOrder: 'desc',    // Optional sort order
+  page: 1,              // Optional pagination
+  limit: 10             // Optional pagination
 });
 
 // Returns:
 // {
-//   "balances": [
-//     {
-//       "asset": "USDC",
-//       "symbol": "USDC",
-//       "wallet_balance": "1000.00",
-//       "fund_positions": [
-//         {
-//           "fund_id": "fund_123",
-//           "fund_name": "USDC Yield Fund",
-//           "position_value": "500.00",
-//           "yield_earned": "25.50",
-//           "apy": "5.10"
-//         }
-//       ],
-//       "total_balance": "1525.50",
-//       "total_yield": "25.50"
-//     }
-//   ],
-//   "total_portfolio_value": "1525.50",
-//   "total_yield_earned": "25.50"
+// 	"data": [
+// 		{
+// 			"token_address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+// 			"token_symbol": "USDC",
+// 			"token_name": "USD Coin",
+// 			"decimals": 6,
+// 			"total_balance": 10470880,
+// 			"yield_balance": {
+// 				"fund_id": "8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV",
+// 				"funds": "1000000",
+// 				"amount_of_yield": "5",
+// 				"fund_apy": 4.999999993617795
+// 			}
+// 		},
+// 		{
+// 			"token_address": "So11111111111111111111111111111111111111112",
+// 			"token_symbol": "SOL",
+// 			"token_name": "Wrapped SOL",
+// 			"decimals": 9,
+// 			"total_balance": 97959415,
+// 			"yield_balance": null
+// 		},
+// 		{
+// 			"token_address": "11111111111111111111111111111112",
+// 			"token_symbol": "SOL",
+// 			"token_name": "Solana",
+// 			"decimals": 9,
+// 			"total_balance": 3207138599,
+// 			"yield_balance": null
+// 		}
+// 	],
+// 	"meta": {
+// 		"page": 1,
+// 		"per_page": 10,
+// 		"total": 3,
+// 		"total_pages": 1,
+// 		"has_more": false
+// 	}
 // }
 ```
 
@@ -208,7 +228,7 @@ const apiClient = sdk.getApiClient();
 ## Complete Example
 
 ```typescript
-import { BreezeSDK } from 'breeze-sdk';
+import { BreezeSDK } from '@breezebaby/breeze-sdk';
 
 async function example() {
   const sdk = new BreezeSDK({
@@ -297,7 +317,7 @@ import {
   getUserBalances,
   getInstructionsForDeposit,
   getTransactionForDeposit
-} from 'breeze-sdk';
+} from '@breezebaby/breeze-sdk';
 
 const apiClient = new ApiClient('https://api.breeze.baby/');
 const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
@@ -336,7 +356,7 @@ import {
   UserBalances, 
   TransactionForDeposit,
   InstructionsForDeposit
-} from 'breeze-sdk';
+} from '@breezebaby/breeze-sdk';
 
 // All API responses are properly typed
 const userYield: UserYield = await sdk.getUserYield({
@@ -360,7 +380,7 @@ const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
 Run integration tests against real API server:
 
 ```bash
-npm run test:integration
+npm run test:all
 ```
 
 ### Example Scripts
@@ -412,14 +432,3 @@ src/
 ├── instructionsForDeposit/    # Deposit instructions
 └── instructionsForWithdraw/   # Withdraw instructions
 ```
-
-## Key Features
-
-- ✅ **Complete API Coverage**: All fund, user, and transaction operations
-- ✅ **TypeScript Support**: Full type definitions and IntelliSense
-- ✅ **Error Handling**: Custom error types with detailed information
-- ✅ **Query Parameters**: Support for filtering and customization
-- ✅ **Solana Integration**: Ready for transaction signing and execution
-- ✅ **Comprehensive Examples**: Real-world usage patterns
-- ✅ **Integration Tests**: Test against live API servers
-- ✅ **Flexible Configuration**: Customizable base URL, timeout, and API keys

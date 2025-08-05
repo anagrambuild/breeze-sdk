@@ -1,18 +1,22 @@
 export default interface UserBalances {
-  balances: Array<{
-    asset: string;
-    symbol: string;
-    wallet_balance: string;
-    total_balance: string;
-    total_yield: string;
-    fund_positions: Array<{
+  data: Array<{
+    token_address: string;
+    token_symbol: string;
+    token_name: string;
+    decimals: number;
+    total_balance: number;
+    yield_balance: {
       fund_id: string;
-      fund_name: string;
-      position_value: string;
-      yield_earned: string;
-      apy: string;
-    }>;
+      funds: string; // amount of funds
+      amount_of_yield: string;
+      fund_apy: number;
+    };
   }>;
-  total_portfolio_value: string;
-  total_yield_earned: string;
+  meta: {
+    page: number;
+    per_page: number;
+    total: number;
+    total_pages: number;
+    has_more: boolean;
+  }
 }

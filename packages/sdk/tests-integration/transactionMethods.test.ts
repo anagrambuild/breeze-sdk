@@ -7,7 +7,7 @@ describe('Transaction Methods Integration Test', () => {
   beforeAll(async () => {
     // Wait for server to be ready
     await waitForServer(TEST_CONFIG.baseUrl);
-    
+
     sdk = new BreezeSDK({
       baseUrl: TEST_CONFIG.baseUrl,
       apiKey: TEST_CONFIG.apiKey,
@@ -23,11 +23,9 @@ describe('Transaction Methods Integration Test', () => {
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should successfully create deposit transaction with minimal options', async () => {
@@ -36,11 +34,9 @@ describe('Transaction Methods Integration Test', () => {
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should successfully create deposit transaction with all=true', async () => {
@@ -51,11 +47,9 @@ describe('Transaction Methods Integration Test', () => {
         all: true,
         payerKey: TEST_CONFIG.testPayerKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should handle invalid fund ID', async () => {
@@ -99,11 +93,9 @@ describe('Transaction Methods Integration Test', () => {
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should successfully create withdraw transaction with minimal options', async () => {
@@ -112,11 +104,9 @@ describe('Transaction Methods Integration Test', () => {
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should successfully create withdraw transaction with all=true', async () => {
@@ -127,11 +117,9 @@ describe('Transaction Methods Integration Test', () => {
         all: true,
         payerKey: TEST_CONFIG.testPayerKey
       });
-      
+
       expect(result).toBeDefined();
-      expect(result.success).toBe(true);
-      expect(result.result).toBeDefined();
-      expect(typeof result.result).toBe('string');
+      expect(typeof result).toBe('string');
     }, 30000);
 
     it('should handle invalid fund ID', async () => {

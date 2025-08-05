@@ -67,7 +67,7 @@ const CONFIG = {
   userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
   
   // Fund Configuration
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
+  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwfV',
   
   // Transaction Configuration
   depositAmount: 100,

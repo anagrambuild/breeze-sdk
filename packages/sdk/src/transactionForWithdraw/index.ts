@@ -1,5 +1,5 @@
 import { ApiClient } from "../builder";
-import TransactionForWithdraw, { BodyForTxWithdraw } from "./types";
+import { BodyForTxWithdraw, TransactionForWithdraw } from "./types";
 
 export async function getTransactionForWithdraw(
   api_client: ApiClient,

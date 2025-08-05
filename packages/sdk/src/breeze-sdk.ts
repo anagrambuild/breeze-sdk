@@ -42,6 +42,8 @@ export class BreezeSDK {
     asset?: string;
     sortBy?: string;
     sortOrder?: string;
+    page?: number;
+    limit?: number;
   }) {
     return getUserBalances(
       this.apiClient,
@@ -49,7 +51,9 @@ export class BreezeSDK {
       options.userId,
       options.asset,
       options.sortBy,
-      options.sortOrder
+      options.sortOrder,
+      options.page,
+      options.limit
     );
   }
 

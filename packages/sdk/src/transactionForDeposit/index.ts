@@ -1,5 +1,5 @@
 import { ApiClient } from "../builder";
-import TransactionForDeposit, { BodyForTxDeposit } from "./types";
+import { BodyForTxDeposit, TransactionForDeposit } from "./types";
 
 export async function getTransactionForDeposit(
   api_client: ApiClient,

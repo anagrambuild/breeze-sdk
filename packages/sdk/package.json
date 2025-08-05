@@ -1,6 +1,6 @@
 {
   "name": "@breezebaby/breeze-sdk",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Breeze SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -21,6 +21,9 @@
     "test": "jest",
     "test:unit": "jest --testPathIgnorePatterns=integration",
     "test:integration": "jest tests/integration.test.ts",
+    "test:balances": "jest tests-integration/getUserYieldAndBalances.test.ts",
+    "test:ixs": "jest tests-integration/instructionMethods.test.ts",
+    "test:txs": "jest tests-integration/transactionMethods.test.ts",
     "test:all": "jest",
     "example:basic": "tsx examples/basic-usage.ts",
     "example:integration": "tsx examples/integration-flow.ts"

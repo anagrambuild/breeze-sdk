@@ -88,11 +88,12 @@ async function fullIntegrationFlow() {
       });
       
       logSuccess('Retrieved user yield data');
-      logInfo(`Total yield earned: ${userYield.total_yield_earned}`);
-      logInfo(`Number of yield records: ${userYield.yields.length}`);
+      logInfo(`Number of yield records: ${userYield.data.length}`);
+      logInfo(`Page: ${userYield.meta.page} of ${userYield.meta.total_pages}`);
+      logInfo(`Total yield records: ${userYield.meta.total}`);
       
-      if (userYield.yields.length > 0) {
-        const latestYield = userYield.yields[0];
+      if (userYield.data.length > 0) {
+        const latestYield = userYield.data[0];
         logInfo(`Latest yield from fund: ${latestYield.fund_name}`);
         logInfo(`Position value: ${latestYield.position_value}`);
         logInfo(`Yield earned: ${latestYield.yield_earned}`);
@@ -110,13 +111,15 @@ async function fullIntegrationFlow() {
         userId: CONFIG.userPublicKey,
         asset: 'USDC',
         sortBy: 'balance',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
+        page: 1,
+        limit: 10
       });
       
       logSuccess('Retrieved user balances');
-      logInfo(`Total portfolio value: ${userBalances.total_portfolio_value}`);
-      logInfo(`Total yield earned: ${userBalances.total_yield_earned}`);
-      logInfo(`Number of balance records: ${userBalances.balances.length}`);
+      logInfo(`Number of balance records: ${userBalances.data.length}`);
+      logInfo(`Page: ${userBalances.meta.page} of ${userBalances.meta.total_pages}`);
+      logInfo(`Total balance records: ${userBalances.meta.total}`);
     } catch (error) {
       logError('Failed to get user balances', error);
     }
@@ -132,11 +135,11 @@ async function fullIntegrationFlow() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (depositTxData.success && depositTxData.result) {
+      if (typeof depositTxData === 'string') {
         logSuccess('Deposit transaction created successfully');
         
         // Deserialize transaction
-        const transactionBuffer = Buffer.from(depositTxData.result, 'base64');
+        const transactionBuffer = Buffer.from(depositTxData, 'base64');
         const transaction = VersionedTransaction.deserialize(transactionBuffer);
         
         // Sign transaction
@@ -176,11 +179,11 @@ async function fullIntegrationFlow() {
         userKey: CONFIG.userPublicKey
       });
       
-      if (withdrawTxData.success && withdrawTxData.result) {
+      if (typeof withdrawTxData === 'string') {
         logSuccess('Withdraw transaction created successfully');
         
         // Deserialize transaction
-        const transactionBuffer = Buffer.from(withdrawTxData.result, 'base64');
+        const transactionBuffer = Buffer.from(withdrawTxData, 'base64');
         const transaction = VersionedTransaction.deserialize(transactionBuffer);
         
         // Sign transaction
@@ -218,19 +221,22 @@ async function fullIntegrationFlow() {
       });
       
       logSuccess('Retrieved final user yield data');
-      logInfo(`Final total yield earned: ${finalYield.total_yield_earned}`);
+      logInfo(`Final yield records: ${finalYield.data.length}`);
+      logInfo(`Final total records: ${finalYield.meta.total}`);
       
       // Get updated balances
       const finalBalances = await sdk.getUserBalances({
         userId: CONFIG.userPublicKey,
         asset: 'USDC',
         sortBy: 'balance',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
+        page: 1,
+        limit: 10
       });
       
       logSuccess('Retrieved final user balances');
-      logInfo(`Final portfolio value: ${finalBalances.total_portfolio_value}`);
-      logInfo(`Final yield earned: ${finalBalances.total_yield_earned}`);
+      logInfo(`Final balance records: ${finalBalances.data.length}`);
+      logInfo(`Final total records: ${finalBalances.meta.total}`);
       
     } catch (error) {
       logError('Failed to get final user state', error);

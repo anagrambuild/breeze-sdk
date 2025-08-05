@@ -1,7 +1,6 @@
-export default interface TransactionForWithdraw {
-  success: boolean;
-  result: string;
-}
+export type TransactionForWithdraw =
+    | string // when the response is just the serialized transaction
+    | { message: string }; // when there's an error
 
 export type BodyForTxWithdraw = {
   params: InputForWithdraw;

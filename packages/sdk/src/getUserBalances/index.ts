@@ -7,7 +7,9 @@ export async function getUserBalances(
   user_id: string,
   asset?: string,
   sort_by?: string,
-  sort_order?: string
+  sort_order?: string,
+  page?: number,
+  limit?: number,
 ) {
   const headers: Record<string, string> = {
     "x-api-key": api_key,
@@ -24,6 +26,12 @@ export async function getUserBalances(
   }
   if (sort_order) {
     params.push(`sort_order=${sort_order}`);
+  }
+  if (page) {
+    params.push(`page=${page}`);
+  }
+  if (limit) {
+    params.push(`limit=${limit}`);
   }
   
   if (params.length > 0) {

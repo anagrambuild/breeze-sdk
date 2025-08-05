@@ -26,11 +26,9 @@ describe('User Yield and Balances Integration Tests', () => {
       console.log('==================================\n');
       
       expect(result).toBeDefined();
-      expect(result.pagination).toBeDefined();
-      expect(result.pagination.limit).toBeDefined();
-      expect(result.pagination.page).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
-      expect(Array.isArray(result.yields)).toBe(true);
+      expect(result.meta).toBeDefined();
+      expect(result.meta.page).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
     }, 30000);
 
     it('should successfully get user yield data with fund filter', async () => {
@@ -40,9 +38,9 @@ describe('User Yield and Balances Integration Tests', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.pagination).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
-      expect(Array.isArray(result.yields)).toBe(true);
+      expect(result.data).toBeDefined();
+      expect(result.meta).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
     }, 30000);
 
     it('should successfully get user yield data with pagination', async () => {
@@ -53,11 +51,9 @@ describe('User Yield and Balances Integration Tests', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.pagination).toBeDefined();
-      expect(result.pagination.limit).toBe(5);
-      expect(result.pagination.page).toBe(1);
-      expect(result.total_yield_earned).toBeDefined();
-      expect(Array.isArray(result.yields)).toBe(true);
+      expect(result.meta.page).toBeDefined();
+      expect(result.meta.page).toBe(1);
+      expect(Array.isArray(result.data)).toBe(true);
     }, 30000);
 
     it('should handle invalid user ID', async () => {
@@ -100,9 +96,7 @@ describe('User Yield and Balances Integration Tests', () => {
       console.log('=====================================\n');
       
       expect(result).toBeDefined();
-      expect(Array.isArray(result.balances)).toBe(true);
-      expect(result.total_portfolio_value).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
     }, 30000);
 
     it('should successfully get user balances with asset filter', async () => {
@@ -116,9 +110,7 @@ describe('User Yield and Balances Integration Tests', () => {
       console.log('=====================================================\n');
       
       expect(result).toBeDefined();
-      expect(Array.isArray(result.balances)).toBe(true);
-      expect(result.total_portfolio_value).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
     }, 30000);
 
     it('should successfully get user balances with sorting', async () => {
@@ -129,9 +121,8 @@ describe('User Yield and Balances Integration Tests', () => {
       });
       
       expect(result).toBeDefined();
-      expect(Array.isArray(result.balances)).toBe(true);
-      expect(result.total_portfolio_value).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.data[1].yield_balance).toBeDefined();
     }, 30000);
 
     it('should successfully get user balances with all options', async () => {
@@ -139,13 +130,14 @@ describe('User Yield and Balances Integration Tests', () => {
         userId: TEST_CONFIG.testUserId,
         asset: 'USDC',
         sortBy: 'balance',
-        sortOrder: 'asc'
+        sortOrder: 'asc',
+        page: 1,
+        limit: 5
       });
       
       expect(result).toBeDefined();
-      expect(Array.isArray(result.balances)).toBe(true);
-      expect(result.total_portfolio_value).toBeDefined();
-      expect(result.total_yield_earned).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.data[0].yield_balance).toBeDefined();
     }, 30000);
 
     it('should handle invalid user ID', async () => {

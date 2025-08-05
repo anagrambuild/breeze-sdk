@@ -1,19 +1,19 @@
 export default interface UserYield {
-  pagination: {
-    limit: number;
-    page: number;
-    total_items: number;
-    total_pages: number;
-  };
-  total_yield_earned: string;
-  yields: Array<{
-    apy: string;
-    base_asset: string;
-    entry_date: string;
+  data: Array<{
     fund_id: string;
     fund_name: string;
-    last_updated: string;
+    base_asset: string;
     position_value: string;
     yield_earned: string;
+    apy: string;
+    entry_date: string;
+    last_updated: string;
   }>;
+  meta: {
+    page: number;
+    per_page: number;
+    total: number;
+    total_pages: number;
+    has_more: boolean;
+  }
 }
