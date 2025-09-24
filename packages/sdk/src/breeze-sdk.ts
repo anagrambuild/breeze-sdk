@@ -59,11 +59,14 @@ export class BreezeSDK {
 
   // Transaction operations
   async createDepositTransaction(options: {
-    fundId: string;
-    amount: number;
-    userKey: string;
+    fundId?: string;
+    amount?: number;
+    userKey?: string;
     all?: boolean;
     payerKey?: string;
+    baseAsset?: string;
+    strategyId?: string;
+    userTokenAccount?: string;
   }) {
     return getTransactionForDeposit(
       this.apiClient,
@@ -72,16 +75,22 @@ export class BreezeSDK {
       options.amount,
       options.userKey,
       options.all,
-      options.payerKey
+      options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount
     );
   }
 
   async createWithdrawTransaction(options: {
-    fundId: string;
-    amount: number;
-    userKey: string;
+    fundId?: string;
+    amount?: number;
+    userKey?: string;
     all?: boolean;
     payerKey?: string;
+    baseAsset?: string;
+    strategyId?: string;
+    userTokenAccount?: string;
   }) {
     return getTransactionForWithdraw(
       this.apiClient,
@@ -90,16 +99,22 @@ export class BreezeSDK {
       options.amount,
       options.userKey,
       options.all,
-      options.payerKey
+      options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount
     );
   }
 
   async getDepositInstructions(options: {
-    fundId: string;
-    amount: number;
-    userKey: string;
+    fundId?: string;
+    amount?: number;
+    userKey?: string;
     all?: boolean;
     payerKey?: string;
+    baseAsset?: string;
+    strategyId?: string;
+    userTokenAccount?: string;
   }) {
     return getInstructionsForDeposit(
       this.apiClient,
@@ -108,16 +123,22 @@ export class BreezeSDK {
       options.amount,
       options.userKey,
       options.all,
-      options.payerKey
+      options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount
     );
   }
 
   async getWithdrawInstruction(options: {
-    fundId: string;
-    amount: number;
-    userKey: string;
+    fundId?: string;
+    amount?: number;
+    userKey?: string;
     all?: boolean;
     payerKey?: string;
+    baseAsset?: string;
+    strategyId?: string;
+    userTokenAccount?: string;
   }) {
     return getInstructionForWithdraw(
       this.apiClient,
@@ -126,7 +147,10 @@ export class BreezeSDK {
       options.amount,
       options.userKey,
       options.all,
-      options.payerKey
+      options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount
     );
   }
 

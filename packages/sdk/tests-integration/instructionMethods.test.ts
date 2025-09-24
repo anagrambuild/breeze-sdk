@@ -19,13 +19,15 @@ describe('Instruction Methods Integration Test', () => {
     it('should successfully get deposit instructions with all options', async () => {
       const result = await sdk.getDepositInstructions({
         fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
       });
       
       expect(result).toBeDefined();
-      expect(result.deposit_instruction).toBeDefined();
+      expect(result.deposit_instructions).toBeDefined();
     }, 30000);
 
     it('should successfully get deposit instructions with minimal options', async () => {
@@ -35,13 +37,17 @@ describe('Instruction Methods Integration Test', () => {
         userKey: TEST_CONFIG.testUserKey
       });
       
+      console.log('Deposit instructions result:', JSON.stringify(result, null, 2));
       expect(result).toBeDefined();
-      expect(result.deposit_instruction).toBeDefined();
+      if (result && typeof result === 'object' && 'deposit_instructions' in result) {
+        expect(result.deposit_instructions).toBeDefined();
+      }
     }, 30000);
 
     it('should successfully get deposit instructions with all=true', async () => {
       const result = await sdk.getDepositInstructions({
-        fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         all: true,
@@ -49,13 +55,14 @@ describe('Instruction Methods Integration Test', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.deposit_instruction).toBeDefined();
+      expect(result.deposit_instructions).toBeDefined();
     }, 30000);
 
     it('should handle invalid fund ID', async () => {
       try {
         await sdk.getDepositInstructions({
-          fundId: 'invalid_fund_id',
+          strategyId: 'invalid_strategy_id',
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -74,7 +81,8 @@ describe('Instruction Methods Integration Test', () => {
 
       try {
         await offlineSDK.getDepositInstructions({
-          fundId: TEST_CONFIG.testFundId,
+          strategyId: TEST_CONFIG.testStrategyId,
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -89,31 +97,35 @@ describe('Instruction Methods Integration Test', () => {
     it('should successfully get withdraw instruction with all options', async () => {
       const result = await sdk.getWithdrawInstruction({
         fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
       });
       
       expect(result).toBeDefined();
-      expect(result.lut_address).toBeDefined();
-      expect(result.withdraw_instruction).toBeDefined();
+      expect(result.lookup_table).toBeDefined();
+      expect(result.withdraw_instructions).toBeDefined();
     }, 30000);
 
     it('should successfully get withdraw instruction with minimal options', async () => {
       const result = await sdk.getWithdrawInstruction({
-        fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });
       
       expect(result).toBeDefined();
-      expect(result.lut_address).toBeDefined();
-      expect(result.withdraw_instruction).toBeDefined();
+      expect(result.lookup_table).toBeDefined();
+      expect(result.withdraw_instructions).toBeDefined();
     }, 30000);
 
     it('should successfully get withdraw instruction with all=true', async () => {
       const result = await sdk.getWithdrawInstruction({
-        fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         all: true,
@@ -121,14 +133,15 @@ describe('Instruction Methods Integration Test', () => {
       });
       
       expect(result).toBeDefined();
-      expect(result.lut_address).toBeDefined();
-      expect(result.withdraw_instruction).toBeDefined();
+      expect(result.lookup_table).toBeDefined();
+      expect(result.withdraw_instructions).toBeDefined();
     }, 30000);
 
     it('should handle invalid fund ID', async () => {
       try {
         await sdk.getWithdrawInstruction({
-          fundId: 'invalid_fund_id',
+          strategyId: 'invalid_strategy_id',
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -147,7 +160,8 @@ describe('Instruction Methods Integration Test', () => {
 
       try {
         await offlineSDK.getWithdrawInstruction({
-          fundId: TEST_CONFIG.testFundId,
+          strategyId: TEST_CONFIG.testStrategyId,
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });

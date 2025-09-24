@@ -1,16 +1,18 @@
 // Test configuration for integration tests
 export const TEST_CONFIG = {
   baseUrl: 'https://api.breeze.baby/',
-  apiKey: 'your_test_api_key',
+  apiKey: 'your-api-key',
   timeout: 10000,
   
   // Test data
-  testUserId: 'xxx',
-  testFundId: 'xxx',
+  testUserId: 'your-user-id',
+  testFundId: 'your-fund-id',
+  testStrategyId: 'test-strategy-id', // Add appropriate strategy ID
   testBaseAsset: 'USDC',
-  testAmount: 100,
-  testPayerKey: 'xxx',
-  testUserKey: 'xxx',
+  testBaseAssetMint: 'base-asset-mint', // USDC mint address
+  testAmount: 1,
+  testPayerKey: 'your-user-id',
+  testUserKey: 'your-user-id',
 };
 
 // Helper function to wait for server

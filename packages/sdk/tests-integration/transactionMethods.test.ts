@@ -19,6 +19,8 @@ describe('Transaction Methods Integration Test', () => {
     it('should successfully create deposit transaction with all options', async () => {
       const result = await sdk.createDepositTransaction({
         fundId: TEST_CONFIG.testFundId,
+        // strategyId: TEST_CONFIG.testStrategyId,
+        // baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
@@ -30,9 +32,12 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create deposit transaction with minimal options', async () => {
       const result = await sdk.createDepositTransaction({
+        // strategyId: TEST_CONFIG.testStrategyId,
+        // baseAsset: TEST_CONFIG.testBaseAssetMint,
         fundId: TEST_CONFIG.testFundId,
         amount: TEST_CONFIG.testAmount,
-        userKey: TEST_CONFIG.testUserKey
+        userKey: TEST_CONFIG.testUserKey,
+        payerKey: TEST_CONFIG.testPayerKey
       });
 
       expect(result).toBeDefined();
@@ -41,6 +46,8 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create deposit transaction with all=true', async () => {
       const result = await sdk.createDepositTransaction({
+        // strategyId: TEST_CONFIG.testStrategyId,
+        // baseAsset: TEST_CONFIG.testBaseAssetMint,
         fundId: TEST_CONFIG.testFundId,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
@@ -55,7 +62,8 @@ describe('Transaction Methods Integration Test', () => {
     it('should handle invalid fund ID', async () => {
       try {
         await sdk.createDepositTransaction({
-          fundId: 'invalid_fund_id',
+          strategyId: 'invalid_strategy_id',
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -74,7 +82,8 @@ describe('Transaction Methods Integration Test', () => {
 
       try {
         await offlineSDK.createDepositTransaction({
-          fundId: TEST_CONFIG.testFundId,
+          strategyId: TEST_CONFIG.testStrategyId,
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -89,6 +98,8 @@ describe('Transaction Methods Integration Test', () => {
     it('should successfully create withdraw transaction with all options', async () => {
       const result = await sdk.createWithdrawTransaction({
         fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         payerKey: TEST_CONFIG.testPayerKey
@@ -100,7 +111,8 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create withdraw transaction with minimal options', async () => {
       const result = await sdk.createWithdrawTransaction({
-        fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });
@@ -111,7 +123,8 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create withdraw transaction with all=true', async () => {
       const result = await sdk.createWithdrawTransaction({
-        fundId: TEST_CONFIG.testFundId,
+        strategyId: TEST_CONFIG.testStrategyId,
+        baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey,
         all: true,
@@ -125,7 +138,8 @@ describe('Transaction Methods Integration Test', () => {
     it('should handle invalid fund ID', async () => {
       try {
         await sdk.createWithdrawTransaction({
-          fundId: 'invalid_fund_id',
+          strategyId: 'invalid_strategy_id',
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
@@ -144,7 +158,8 @@ describe('Transaction Methods Integration Test', () => {
 
       try {
         await offlineSDK.createWithdrawTransaction({
-          fundId: TEST_CONFIG.testFundId,
+          strategyId: TEST_CONFIG.testStrategyId,
+          baseAsset: TEST_CONFIG.testBaseAssetMint,
           amount: TEST_CONFIG.testAmount,
           userKey: TEST_CONFIG.testUserKey
         });
