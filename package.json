@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^22.15.23",
-    "breeze-ui-library": "^0.0.5",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
