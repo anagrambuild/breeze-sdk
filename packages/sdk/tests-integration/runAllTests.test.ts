@@ -30,6 +30,10 @@ describe('All SDK Methods Integration Tests', () => {
       expect(typeof sdk.createWithdrawTransaction).toBe('function');
       expect(typeof sdk.getDepositInstructions).toBe('function');
       expect(typeof sdk.getWithdrawInstruction).toBe('function');
+      expect(typeof sdk.getUserYield).toBe('function');
+      expect(typeof sdk.getUserBalances).toBe('function');
+      expect(typeof sdk.getBreezeBalances).toBe('function');
+      expect(typeof sdk.getStrategyInfo).toBe('function');
       expect(typeof sdk.updateApiKey).toBe('function');
     });
   });

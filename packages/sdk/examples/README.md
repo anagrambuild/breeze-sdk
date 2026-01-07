@@ -5,13 +5,32 @@ This directory contains example scripts demonstrating how to use the Breeze SDK.
 ## Available Examples
 
 ### 1. Basic Usage (`basic-usage.ts`)
-A simple example showing basic SDK initialization and method calls including the new getUserYield and getUserBalances methods.
+A simple example showing basic SDK initialization and method calls including getUserYield, getUserBalances, getBreezeBalances, and getStrategyInfo methods.
 
 ```bash
 npm run example:basic
 ```
 
-### 2. Integration Flow (`integration-flow.ts`)
+### 2. Strategy and Balances Example (`strategy-balances-example.ts`)
+A comprehensive example demonstrating the new strategy-related API methods:
+- Get strategy information with APY data
+- Get breeze balances with strategy-specific details
+- Filter balances by asset
+- Pagination and sorting
+- Portfolio analysis combining strategy info and user balances
+
+**Features:**
+- ✅ Complete strategy information retrieval
+- ✅ Breeze-specific balance queries
+- ✅ Asset filtering and pagination examples
+- ✅ Portfolio analysis and APY comparisons
+- ✅ No external dependencies required
+
+```bash
+npx tsx examples/strategy-balances-example.ts
+```
+
+### 3. Integration Flow (`integration-flow.ts`)
 A comprehensive example that demonstrates a complete user flow:
 - Get user yield data
 - Get user balances
@@ -34,7 +53,7 @@ A comprehensive example that demonstrates a complete user flow:
 npm run example:integration
 ```
 
-### 3. Integration Flow Simple (`integration-flow-simple.ts`)
+### 4. Integration Flow Simple (`integration-flow-simple.ts`)
 A simplified version of the integration flow that demonstrates API calls without executing transactions.
 
 **Features:**
@@ -89,6 +108,10 @@ npm install --save-dev tsx
 ### User Operations
 - `getUserYield(options)` - Get user yield data with pagination and fund filtering
 - `getUserBalances(options)` - Get user balances with asset filtering and sorting
+- `getBreezeBalances(options)` - Get breeze-specific balances with strategy details (requires strategyId)
+
+### Strategy Operations
+- `getStrategyInfo(strategyId)` - Get strategy information including supported assets and APY data
 
 ### Transaction Operations
 - `createDepositTransaction(options)` - Create deposit transaction

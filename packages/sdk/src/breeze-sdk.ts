@@ -1,6 +1,8 @@
 import { ApiClient, BreezeApiError } from './builder';
 import { getUserYield } from './getUserYield';
 import { getUserBalances } from './getUserBalances';
+import { getBreezeBalances } from './getBreezeBalances';
+import { getStrategyInfo } from './getStrategyInfo';
 import { getTransactionForDeposit } from './transactionForDeposit';
 import { getTransactionForWithdraw } from './transactionForWithdraw';
 import { getInstructionsForDeposit } from './instructionsForDeposit';
@@ -55,6 +57,32 @@ export class BreezeSDK {
       options.page,
       options.limit
     );
+  }
+
+  async getBreezeBalances(options: {
+    userId: string;
+    asset?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    page?: number;
+    limit?: number;
+    strategyId: string; // Obligatory parameter
+  }) {
+    return getBreezeBalances(
+      this.apiClient,
+      this.apiKey,
+      options.userId,
+      options.asset,
+      options.sortBy,
+      options.sortOrder,
+      options.page,
+      options.limit,
+      options.strategyId
+    );
+  }
+
+  async getStrategyInfo(strategyId: string) {
+    return getStrategyInfo(this.apiClient, this.apiKey, strategyId);
   }
 
   // Transaction operations

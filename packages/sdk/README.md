@@ -151,6 +151,84 @@ const userBalances = await sdk.getUserBalances({
 // }
 ```
 
+**`getBreezeBalances(options)`**
+Get breeze-specific balance information with strategy details, including position values, yields, and APY data.
+
+```typescript
+// Basic usage - strategyId is required
+const breezeBalances = await sdk.getBreezeBalances({
+  userId: 'your-user-id',
+  strategyId: 'your-strategy-id'
+});
+
+// With optional parameters
+const breezeBalances = await sdk.getBreezeBalances({
+  userId: 'your-user-id',
+  strategyId: 'your-strategy-id', // Required
+  asset: 'USDC',        // Optional filter by asset symbol or mint address
+  sortBy: 'balance',    // Optional sorting field
+  sortOrder: 'desc',    // Optional sort order (asc/desc)
+  page: 1,              // Optional pagination
+  limit: 10             // Optional pagination
+});
+
+// Returns:
+// {
+//   "data": [
+//     {
+//       "strategy_name": "try-breeze-all-assets",
+//       "strategy_id": "your-strategy-id",
+//       "fund_id": "6ZBKy52sqCN8UuCFkCbqTRUtYgMTvrqds1MqTXdrYRxt",
+//       "token_address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+//       "token_symbol": "USDC",
+//       "token_name": "USD Coin",
+//       "decimals": 6,
+//       "total_position_value": 2003215,
+//       "total_deposited_value": 2003213,
+//       "yield_earned": 2,
+//       "apy": 4.999327213904799,
+//       "last_updated": "2026-01-07T18:32:05+00:00"
+//     }
+//   ],
+//   "meta": {
+//     "page": 1,
+//     "per_page": 1000,
+//     "total": 2,
+//     "total_pages": 1,
+//     "has_more": false
+//   }
+// }
+```
+
+##### Strategy Operations
+
+**`getStrategyInfo(strategyId)`**
+Get detailed information about a specific strategy, including supported assets and APY data per asset.
+
+```typescript
+const strategyInfo = await sdk.getStrategyInfo('your-strategy-id');
+
+// Returns:
+// {
+//   "strategy_id": "your-strategy-id",
+//   "strategy_name": "try-breeze-all-assets",
+//   "assets": [
+//     "So11111111111111111111111111111111111111112",
+//     "jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v",
+//     "USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA",
+//     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+//     ...
+//   ],
+//   "apy": 4.297586617097455,
+//   "apy_per_asset": {
+//     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": 5.660193556175348,
+//     "USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA": 3.9268279189073074,
+//     "So11111111111111111111111111111111111111112": 2.7887160175531163,
+//     ...
+//   }
+// }
+```
+
 ##### Transaction Operations
 
 **`createDepositTransaction(options)`**
@@ -237,26 +315,41 @@ async function example() {
   });
 
   try {
-    // 1. Get user yield data
+    // 1. Get strategy information
+    const strategyInfo = await sdk.getStrategyInfo('your-strategy-id');
+    console.log('Strategy:', strategyInfo.strategy_name);
+    console.log('Overall APY:', strategyInfo.apy);
+    console.log('Supported assets:', strategyInfo.assets.length);
+
+    // 2. Get user yield data
     const userYield = await sdk.getUserYield({
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       page: 1,
       limit: 10
     });
-    console.log('Total yield earned:', userYield.total_yield_earned);
-    console.log('Yield records:', userYield.yields.length);
+    console.log('Yield records:', userYield.data.length);
 
-    // 2. Get user balances
+    // 3. Get breeze balances with strategy details
+    const breezeBalances = await sdk.getBreezeBalances({
+      userId: 'your-user-id',
+      strategyId: 'your-strategy-id',
+      asset: 'USDC'
+    });
+    console.log('Breeze balances:', breezeBalances.data.length);
+    breezeBalances.data.forEach(balance => {
+      console.log(`${balance.token_symbol}: ${balance.total_position_value} (APY: ${balance.apy}%)`);
+    });
+
+    // 4. Get user balances
     const userBalances = await sdk.getUserBalances({
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       asset: 'USDC',
       sortBy: 'balance',
       sortOrder: 'desc'
     });
-    console.log('Total portfolio value:', userBalances.total_portfolio_value);
-    console.log('Balance records:', userBalances.balances.length);
+    console.log('Balance records:', userBalances.data.length);
 
-    // 3. Create deposit transaction
+    // 5. Create deposit transaction
     const deposit = await sdk.createDepositTransaction({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
@@ -264,7 +357,7 @@ async function example() {
     });
     console.log('Deposit transaction created:', deposit.success);
 
-    // 4. Get deposit instructions (for manual transaction building)
+    // 6. Get deposit instructions (for manual transaction building)
     const instructions = await sdk.getDepositInstructions({
       fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
       amount: 100,
@@ -311,17 +404,38 @@ console.log('Transaction signature:', signature);
 For advanced use cases, you can use the individual functions and ApiClient directly:
 
 ```typescript
-import { 
-  ApiClient, 
+import {
+  ApiClient,
   getUserYield,
   getUserBalances,
+  getBreezeBalances,
+  getStrategyInfo,
   getInstructionsForDeposit,
   getTransactionForDeposit
 } from '@breezebaby/breeze-sdk';
 
 const apiClient = new ApiClient('https://api.breeze.baby/');
-const userYield = await getUserYield(apiClient, 'api_key', 'user_id');
-const userBalances = await getUserBalances(apiClient, 'api_key', 'user_id');
+const apiKey = 'your-api-key';
+
+// Get strategy info
+const strategyInfo = await getStrategyInfo(apiClient, apiKey, 'strategy_id');
+
+// Get user data
+const userYield = await getUserYield(apiClient, apiKey, 'user_id');
+const userBalances = await getUserBalances(apiClient, apiKey, 'user_id');
+
+// Get breeze balances with strategy details
+const breezeBalances = await getBreezeBalances(
+  apiClient,
+  apiKey,
+  'user_id',
+  undefined, // asset
+  undefined, // sort_by
+  undefined, // sort_order
+  undefined, // page
+  undefined, // limit
+  'strategy_id'
+);
 ```
 
 ## Required API Endpoint
@@ -332,6 +446,8 @@ The SDK requires access to the Breeze API at:
 Make sure your API key has access to the following endpoints:
 - `GET /user-yield/{user_id}` - User yield data retrieval
 - `GET /user-balances/{user_id}` - User balance information
+- `GET /breeze-balances/{user_id}` - Breeze-specific balance information with strategy details
+- `GET /strategy-info/{strategy_id}` - Strategy information and APY data
 - `POST /deposit/tx` - Deposit transaction creation
 - `POST /withdraw/tx` - Withdraw transaction creation
 - `POST /deposit/ix` - Deposit instruction generation
@@ -351,9 +467,12 @@ Make sure your API key has access to the following endpoints:
 The SDK is written in TypeScript and provides full type definitions:
 
 ```typescript
-import { 
+import {
   UserYield,
-  UserBalances, 
+  UserBalances,
+  BreezeBalancesResponse,
+  BreezeBalance,
+  StrategyInfo,
   TransactionForDeposit,
   InstructionsForDeposit
 } from '@breezebaby/breeze-sdk';
@@ -366,6 +485,13 @@ const userYield: UserYield = await sdk.getUserYield({
 const userBalances: UserBalances = await sdk.getUserBalances({
   userId: 'user_123'
 });
+
+const breezeBalances: BreezeBalancesResponse = await sdk.getBreezeBalances({
+  userId: 'user_123',
+  strategyId: 'strategy_123'
+});
+
+const strategyInfo: StrategyInfo = await sdk.getStrategyInfo('strategy_123');
 
 const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
   fundId: 'fund_123',
@@ -395,6 +521,8 @@ The SDK interacts with these API endpoints:
 ### GET Endpoints
 - `GET /user-yield/{user_id}` - Get user yield data (supports pagination and fund filtering)
 - `GET /user-balances/{user_id}` - Get user balance information (supports asset filtering and sorting)
+- `GET /breeze-balances/{user_id}` - Get breeze balances with strategy details (requires strategyId, supports asset filtering, sorting, and pagination)
+- `GET /strategy-info/{strategy_id}` - Get strategy information including assets and APY data
 
 ### POST Endpoints  
 - `POST /deposit/tx` - Create deposit transaction (requires fundId, amount, userKey)
@@ -427,6 +555,8 @@ src/
 ├── index.ts                   # Main exports
 ├── getUserYield/              # User yield operations
 ├── getUserBalances/           # User balance operations
+├── getBreezeBalances/         # Breeze balance operations with strategy details
+├── getStrategyInfo/           # Strategy information operations
 ├── transactionForDeposit/     # Deposit transactions
 ├── transactionForWithdraw/    # Withdraw transactions
 ├── instructionsForDeposit/    # Deposit instructions
