@@ -77,17 +77,18 @@ const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
   baseUrl: 'https://api.breeze.baby/',
-  
-  // Solana Configuration  
+
+  // Solana Configuration
   rpcUrl: 'https://api.mainnet-beta.solana.com',
-  
+
   // User Configuration
   privateKey: 'YOUR_PRIVATE_KEY_BASE58_HERE', // Base58 encoded private key
   userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
-  
-  // Fund Configuration
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwfV',
-  
+
+  // Strategy Configuration
+  strategyId: 'your-strategy-id',
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Token mint address (e.g., USDC)
+
   // Transaction Configuration
   depositAmount: 100,
   withdrawAmount: 50

@@ -49,7 +49,7 @@ new BreezeSDK(config: BreezeSDKConfig)
 ##### User Operations
 
 **`getUserYield(options)`**
-Get user yield data with pagination and fund filtering.
+Get user yield data with pagination.
 
 ```typescript
 // Basic usage
@@ -60,7 +60,6 @@ const userYield = await sdk.getUserYield({
 // With optional parameters
 const userYield = await sdk.getUserYield({
   userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Optional filter
   page: 1,      // Optional pagination
   limit: 10     // Optional pagination
 });
@@ -154,11 +153,12 @@ const userBalances = await sdk.getUserBalances({
 ##### Transaction Operations
 
 **`createDepositTransaction(options)`**
-Create a deposit transaction. **Required parameters**: `fundId`, `amount`, `userKey`.
+Create a deposit transaction. **Required parameters**: `strategyId`, `baseAsset` (mint address), `amount`, `userKey`.
 
 ```typescript
 const depositTx = await sdk.createDepositTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW', // Required
+  strategyId: 'your-strategy-id', // Required
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
   amount: 100, // Required
   userKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Required
   payerKey: '4Z9byLWE4DhH3KM84mjrkggkCxPuU8eBFgM44Enj41bh', // Optional
@@ -168,11 +168,12 @@ const depositTx = await sdk.createDepositTransaction({
 ```
 
 **`createWithdrawTransaction(options)`**
-Create a withdraw transaction. **Required parameters**: `fundId`, `amount`, `userKey`.
+Create a withdraw transaction. **Required parameters**: `strategyId`, `baseAsset` (mint address), `amount`, `userKey`.
 
 ```typescript
 const withdrawTx = await sdk.createWithdrawTransaction({
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+  strategyId: 'your-strategy-id', // Required
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
   amount: 50, // Required
   userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
   payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
@@ -182,31 +183,33 @@ const withdrawTx = await sdk.createWithdrawTransaction({
 ```
 
 **`getDepositInstructions(options)`**
-Get Solana transaction instructions for deposits. **Required parameters**: `fundId`, `amount`, `userKey`.
+Get Solana transaction instructions for deposits. **Required parameters**: `strategyId`, `baseAsset` (mint address), `amount`, `userKey`.
 
 ```typescript
 const depositIx = await sdk.getDepositInstructions({
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+  strategyId: 'your-strategy-id', // Required
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
   amount: 100, // Required
   userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
   payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
   all: false // Optional
 });
-// Returns: { deposit_instruction: [instruction_objects] }
+// Returns: { deposit_instructions: [instruction_objects] }
 ```
 
 **`getWithdrawInstruction(options)`**
-Get Solana transaction instruction for withdrawals. **Required parameters**: `fundId`, `amount`, `userKey`.
+Get Solana transaction instruction for withdrawals. **Required parameters**: `strategyId`, `baseAsset` (mint address), `amount`, `userKey`.
 
 ```typescript
 const withdrawIx = await sdk.getWithdrawInstruction({
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+  strategyId: 'your-strategy-id', // Required
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
   amount: 50, // Required
   userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
   payerKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Optional
   all: false // Optional
 });
-// Returns: { lut_address: "...", withdraw_instruction: instruction_object }
+// Returns: { lut_address: "...", withdraw_instructions: [instruction_object] }
 ```
 
 ##### Utility Methods
@@ -236,41 +239,50 @@ async function example() {
     apiKey: 'your-api-key-here'
   });
 
+  const strategyId = 'your-strategy-id';
+  const usdcMint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // USDC mint address
+
   try {
-    // 1. Get user yield data
+    // 1. Get strategy information
+    const strategyInfo = await sdk.getStrategyInfo(strategyId);
+    console.log('Strategy name:', strategyInfo.strategy_name);
+    console.log('Supported assets:', strategyInfo.assets);
+    console.log('APY per asset:', strategyInfo.apy_per_asset);
+
+    // 2. Get user yield data
     const userYield = await sdk.getUserYield({
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       page: 1,
       limit: 10
     });
-    console.log('Total yield earned:', userYield.total_yield_earned);
-    console.log('Yield records:', userYield.yields.length);
+    console.log('Yield records:', userYield.data.length);
 
-    // 2. Get user balances
+    // 3. Get user balances
     const userBalances = await sdk.getUserBalances({
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
       asset: 'USDC',
       sortBy: 'balance',
       sortOrder: 'desc'
     });
-    console.log('Total portfolio value:', userBalances.total_portfolio_value);
-    console.log('Balance records:', userBalances.balances.length);
+    console.log('Balance records:', userBalances.data.length);
 
-    // 3. Create deposit transaction
+    // 4. Create deposit transaction using strategyId + baseAsset (mint)
     const deposit = await sdk.createDepositTransaction({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
+      strategyId: strategyId,
+      baseAsset: usdcMint,
       amount: 100,
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
-    console.log('Deposit transaction created:', deposit.success);
+    console.log('Deposit transaction created');
 
-    // 4. Get deposit instructions (for manual transaction building)
+    // 5. Get deposit instructions (for manual transaction building)
     const instructions = await sdk.getDepositInstructions({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
+      strategyId: strategyId,
+      baseAsset: usdcMint,
       amount: 100,
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
-    console.log('Has instructions:', !!instructions.deposit_instruction);
+    console.log('Has instructions:', !!instructions.deposit_instructions);
 
   } catch (error) {
     console.error('Error:', error.message);
@@ -290,9 +302,10 @@ import bs58 from 'bs58';
 const connection = new Connection('https://api.mainnet-beta.solana.com');
 const userKeypair = Keypair.fromSecretKey(bs58.decode('your-private-key'));
 
-// Create transaction
+// Create transaction using strategyId + baseAsset (mint address)
 const depositTx = await sdk.createDepositTransaction({
-  fundId: 'DYUgGU88Fsyr2xmYAv2p8jXVPa3jrcUZmb36C8EgfpaW',
+  strategyId: 'your-strategy-id',
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC mint address
   amount: 100,
   userKey: userKeypair.publicKey.toString()
 });
@@ -368,7 +381,8 @@ const userBalances: UserBalances = await sdk.getUserBalances({
 });
 
 const instructions: InstructionsForDeposit = await sdk.getDepositInstructions({
-  fundId: 'fund_123',
+  strategyId: 'strategy_123',
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // mint address
   amount: 100,
   userKey: 'user_key'
 });
@@ -393,14 +407,15 @@ Check the examples out, in the packages/sdk/examples
 The SDK interacts with these API endpoints:
 
 ### GET Endpoints
-- `GET /user-yield/{user_id}` - Get user yield data (supports pagination and fund filtering)
+- `GET /user-yield/{user_id}` - Get user yield data (supports pagination)
 - `GET /user-balances/{user_id}` - Get user balance information (supports asset filtering and sorting)
+- `GET /strategy-info/{strategy_id}` - Get strategy information including supported assets and APY data
 
-### POST Endpoints  
-- `POST /deposit/tx` - Create deposit transaction (requires fundId, amount, userKey)
-- `POST /withdraw/tx` - Create withdraw transaction (requires fundId, amount, userKey)
-- `POST /deposit/ix` - Get deposit instructions (requires fundId, amount, userKey)
-- `POST /withdraw/ix` - Get withdraw instruction (requires fundId, amount, userKey)
+### POST Endpoints
+- `POST /deposit/tx` - Create deposit transaction (requires strategyId, baseAsset, amount, userKey)
+- `POST /withdraw/tx` - Create withdraw transaction (requires strategyId, baseAsset, amount, userKey)
+- `POST /deposit/ix` - Get deposit instructions (requires strategyId, baseAsset, amount, userKey)
+- `POST /withdraw/ix` - Get withdraw instruction (requires strategyId, baseAsset, amount, userKey)
 
 ## Development
 

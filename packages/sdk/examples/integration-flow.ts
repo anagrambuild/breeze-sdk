@@ -8,17 +8,18 @@ const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
   baseUrl: 'https://api.breeze.baby/',
-  
-  // Solana Configuration  
+
+  // Solana Configuration
   rpcUrl: 'https://api.mainnet-beta.solana.com',
-  
+
   // User Configuration
   privateKey: 'your_private_key', // Base58 encoded private key
   userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Should match private key
-  
-  // Fund Configuration
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
-  
+
+  // Strategy Configuration
+  strategyId: 'your-strategy-id',
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Token mint address (e.g., USDC)
+
   // Transaction Configuration
   depositAmount: 5,
   withdrawAmount: 5
@@ -78,11 +79,10 @@ async function fullIntegrationFlow() {
     
     // ===== STEP 1: GET USER YIELD DATA =====
     logSection('STEP 1: GET USER YIELD DATA');
-    
+
     try {
       const userYield = await sdk.getUserYield({
         userId: CONFIG.userPublicKey,
-        fundId: CONFIG.fundId,
         page: 1,
         limit: 10
       });
@@ -130,7 +130,8 @@ async function fullIntegrationFlow() {
     try {
       logInfo(`Creating deposit transaction for ${CONFIG.depositAmount} tokens...`);
       const depositTxData = await sdk.createDepositTransaction({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.depositAmount,
         userKey: CONFIG.userPublicKey
       });
@@ -174,7 +175,8 @@ async function fullIntegrationFlow() {
     try {
       logInfo(`Creating withdraw transaction for ${CONFIG.withdrawAmount} tokens...`);
       const withdrawTxData = await sdk.createWithdrawTransaction({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.withdrawAmount,
         userKey: CONFIG.userPublicKey
       });
@@ -215,7 +217,6 @@ async function fullIntegrationFlow() {
       // Get updated yield data
       const finalYield = await sdk.getUserYield({
         userId: CONFIG.userPublicKey,
-        fundId: CONFIG.fundId,
         page: 1,
         limit: 5
       });
@@ -255,7 +256,8 @@ async function fullIntegrationFlow() {
 console.log('🚀 Starting Breeze SDK Full Integration Flow...');
 console.log('📋 Configuration:');
 console.log(`   API URL: ${CONFIG.baseUrl}`);
-console.log(`   Fund ID: ${CONFIG.fundId}`);
+console.log(`   Strategy ID: ${CONFIG.strategyId}`);
+console.log(`   Base Asset (mint): ${CONFIG.baseAsset}`);
 console.log(`   User: ${CONFIG.userPublicKey}`);
 console.log(`   Deposit Amount: ${CONFIG.depositAmount}`);
 console.log(`   Withdraw Amount: ${CONFIG.withdrawAmount}`);

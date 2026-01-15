@@ -11,7 +11,8 @@ export const TEST_CONFIG = {
   baseUrl: 'http://api.breeze.baby/',
   apiKey: 'your_test_api_key',
   testUserId: 'test_user_123',
-  testFundId: 'test_fund_456',
+  testStrategyId: 'test_strategy_456',
+  testBaseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Token mint address
   testOrganizationId: 'test_org_789',
   // ... other config
 };
@@ -71,15 +72,16 @@ The tests expect the following endpoints to be available:
 ## Query Parameters Tested
 
 ### getUserValue & getUserStats
-- `fund_id` (string)
-- `base_asset` (string)
+- `strategy_id` (string)
+- `base_asset` (string) - token mint address
 - `fiat_value` (string)
 - `start` (string) - for getUserStats only
 - `end` (string) - for getUserStats only
 
 ### getPartnerFundStats
 - `organization_id` (string)
-- `base_asset` (string)
+- `strategy_id` (string)
+- `base_asset` (string) - token mint address
 - `fiat_value` (string)
 - `start` (string)
 - `end` (string)
