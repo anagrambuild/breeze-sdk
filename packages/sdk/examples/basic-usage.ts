@@ -21,7 +21,6 @@ async function exampleUsage() {
     // Get user yield data
     const userYield = await sdk.getUserYield({
       userId: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Optional filter
       page: 1,
       limit: 10
     });
@@ -64,36 +63,40 @@ async function exampleUsage() {
       console.log(`  Last Updated: ${balance.last_updated}`);
     }
 
-    // Create a deposit transaction (required: fundId, amount, userKey)
+    // Create a deposit transaction (required: strategyId, baseAsset, amount, userKey)
     const depositTx = await sdk.createDepositTransaction({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+      strategyId: 'your-strategy-id', // Required
+      baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
       amount: 100, // Required
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
       all: false // Optional: whether to deposit all available funds
     });
     console.log('Deposit transaction:', depositTx);
 
-    // Create a withdraw transaction (required: fundId, amount, userKey)
+    // Create a withdraw transaction (required: strategyId, baseAsset, amount, userKey)
     const withdrawTx = await sdk.createWithdrawTransaction({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV', // Required
+      strategyId: 'your-strategy-id', // Required
+      baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required - token mint address (e.g., USDC)
       amount: 50, // Required
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY', // Required
       all: false // Optional: whether to withdraw all amount
     });
     console.log('Withdraw transaction:', withdrawTx);
 
-    // Get deposit instructions (returns deposit_instruction)
+    // Get deposit instructions (returns deposit_instructions)
     const depositInstructions = await sdk.getDepositInstructions({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
+      strategyId: 'your-strategy-id',
+      baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // token mint address
       amount: 100,
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });
     console.log('Deposit instructions:', depositInstructions);
     console.log('Has deposit instructions:', !!depositInstructions.deposit_instructions);
 
-    // Get withdraw instruction (returns lut_address and withdraw_instruction)
+    // Get withdraw instruction (returns lut_address and withdraw_instructions)
     const withdrawInstruction = await sdk.getWithdrawInstruction({
-      fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
+      strategyId: 'your-strategy-id',
+      baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // token mint address
       amount: 50,
       userKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY'
     });

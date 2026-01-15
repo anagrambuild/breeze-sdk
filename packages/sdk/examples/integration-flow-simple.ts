@@ -6,13 +6,14 @@ const CONFIG = {
   // API Configuration
   apiKey: 'apy_key_here',
   baseUrl: 'https://api.breeze.baby/',
-  
+
   // User Configuration
   userPublicKey: '7EcSQsLNbkorQr3igFzfEwFJoPEUgB3NfmDTAigEcoSY',
-  
-  // Fund Configuration
-  fundId: '8pfa41TvGWyttSViHRaNwFwbjhDEgmf3tHj81XR3CwWV',
-  
+
+  // Strategy Configuration
+  strategyId: 'your-strategy-id',
+  baseAsset: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Token mint address (e.g., USDC)
+
   // Transaction Configuration
   depositAmount: 100,
   withdrawAmount: 50
@@ -61,7 +62,6 @@ async function integrationFlowSimple() {
     try {
       const userYield = await sdk.getUserYield({
         userId: CONFIG.userPublicKey,
-        fundId: CONFIG.fundId,
         page: 1,
         limit: 10
       });
@@ -132,7 +132,8 @@ async function integrationFlowSimple() {
     try {
       logInfo(`Creating deposit transaction for ${CONFIG.depositAmount} tokens...`);
       depositTxData = await sdk.createDepositTransaction({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.depositAmount,
         userKey: CONFIG.userPublicKey
       });
@@ -163,7 +164,8 @@ async function integrationFlowSimple() {
     try {
       logInfo(`Creating withdraw transaction for ${CONFIG.withdrawAmount} tokens...`);
       const withdrawTxData = await sdk.createWithdrawTransaction({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.withdrawAmount,
         userKey: CONFIG.userPublicKey
       });
@@ -195,26 +197,28 @@ async function integrationFlowSimple() {
       // Get deposit instructions
       logInfo('Getting deposit instructions...');
       const depositInstructions = await sdk.getDepositInstructions({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.depositAmount,
         userKey: CONFIG.userPublicKey
       });
-      
+
       logSuccess('Retrieved deposit instructions');
-      logInfo(`Has deposit instructions: ${!!depositInstructions.deposit_instruction}`);
-      logInfo(`Deposit instruction type: ${typeof depositInstructions.deposit_instruction}`);
-      
+      logInfo(`Has deposit instructions: ${!!depositInstructions.deposit_instructions}`);
+      logInfo(`Deposit instruction type: ${typeof depositInstructions.deposit_instructions}`);
+
       // Get withdraw instruction
       logInfo('Getting withdraw instruction...');
       const withdrawInstruction = await sdk.getWithdrawInstruction({
-        fundId: CONFIG.fundId,
+        strategyId: CONFIG.strategyId,
+        baseAsset: CONFIG.baseAsset,
         amount: CONFIG.withdrawAmount,
         userKey: CONFIG.userPublicKey
       });
       
       logSuccess('Retrieved withdraw instruction');
-      logInfo(`Lookup table address: ${withdrawInstruction.lut_address}`);
-      logInfo(`Withdraw instruction type: ${typeof withdrawInstruction.withdraw_instruction}`);
+      logInfo(`Lookup table address: ${withdrawInstruction.lookup_table}`);
+      logInfo(`Withdraw instruction type: ${typeof withdrawInstruction.withdraw_instructions}`);
       
     } catch (error) {
       logError('Failed to get transaction instructions', error);
@@ -234,7 +238,8 @@ async function integrationFlowSimple() {
 console.log('🚀 Starting Breeze SDK Integration Flow (Simple Version)...');
 console.log('📋 Configuration:');
 console.log(`   API URL: ${CONFIG.baseUrl}`);
-console.log(`   Fund ID: ${CONFIG.fundId}`);
+console.log(`   Strategy ID: ${CONFIG.strategyId}`);
+console.log(`   Base Asset (mint): ${CONFIG.baseAsset}`);
 console.log(`   User: ${CONFIG.userPublicKey}`);
 console.log(`   Deposit Amount: ${CONFIG.depositAmount}`);
 console.log(`   Withdraw Amount: ${CONFIG.withdrawAmount}`);
