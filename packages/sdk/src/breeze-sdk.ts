@@ -122,6 +122,10 @@ export class BreezeSDK {
     baseAsset?: string;
     strategyId?: string;
     userTokenAccount?: string;
+    createWsolAta?: boolean;
+    unwrapWsolAta?: boolean;
+    detectWsolAta?: boolean;
+    excludeFees?: boolean;
   }) {
     return getTransactionForWithdraw(
       this.apiClient,
@@ -133,7 +137,11 @@ export class BreezeSDK {
       options.payerKey,
       options.baseAsset,
       options.strategyId,
-      options.userTokenAccount
+      options.userTokenAccount,
+      options.createWsolAta,
+      options.unwrapWsolAta,
+      options.detectWsolAta,
+      options.excludeFees
     );
   }
 
@@ -170,6 +178,10 @@ export class BreezeSDK {
     baseAsset?: string;
     strategyId?: string;
     userTokenAccount?: string;
+    createWsolAta?: boolean;
+    unwrapWsolAta?: boolean;
+    detectWsolAta?: boolean;
+    excludeFees?: boolean;
   }) {
     return getInstructionForWithdraw(
       this.apiClient,
@@ -181,7 +193,11 @@ export class BreezeSDK {
       options.payerKey,
       options.baseAsset,
       options.strategyId,
-      options.userTokenAccount
+      options.userTokenAccount,
+      options.createWsolAta,
+      options.unwrapWsolAta,
+      options.detectWsolAta,
+      options.excludeFees
     );
   }
 
