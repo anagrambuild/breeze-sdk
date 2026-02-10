@@ -15,4 +15,8 @@ type InputForWithdraw = {
   base_asset?: string;
   strategy_id?: string;
   user_token_account?: string;
+  create_wsol_ata?: boolean;
+  unwrap_wsol_ata?: boolean;
+  detect_wsol_ata?: boolean;
+  exclude_fees?: boolean;
 };

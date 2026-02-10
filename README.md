@@ -212,6 +212,45 @@ const withdrawIx = await sdk.getWithdrawInstruction({
 // Returns: { lut_address: "...", withdraw_instructions: [instruction_object] }
 ```
 
+##### Close User Account Operations
+
+**`createCloseUserAccountTransaction(options)`**
+Close a user account and return a serialized transaction. You can identify the account by `userPubkey` + `strategyId` + `mint`.
+
+```typescript
+const closeTx = await sdk.createCloseUserAccountTransaction({
+  userPubkey: 'your-user-pubkey', // Required
+  strategyId: 'your-strategy-id', // Required with userPubkey
+  mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // Required with userPubkey
+  payer: 'payer-pubkey', // Optional
+  fundsRecipient: 'funds-recipient-pubkey', // Optional
+  userTokenAccount: 'token-account-address' // Optional
+});
+// Returns base64 encoded transaction string
+```
+
+**`getCloseUserAccountInstructions(options)`**
+Get Solana instructions for closing a user account. Same parameters as above.
+
+```typescript
+const closeIx = await sdk.getCloseUserAccountInstructions({
+  userPubkey: 'your-user-pubkey',
+  strategyId: 'your-strategy-id',
+  mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+});
+// Returns: { close_user_fund_instructions: [instruction_objects] }
+```
+
+##### Health Check
+
+**`getHealth()`**
+Check if the API server is healthy.
+
+```typescript
+const health = await sdk.getHealth();
+// Returns: "OK"
+```
+
 ##### Utility Methods
 
 **`updateApiKey(newApiKey: string)`**
@@ -349,6 +388,9 @@ Make sure your API key has access to the following endpoints:
 - `POST /withdraw/tx` - Withdraw transaction creation
 - `POST /deposit/ix` - Deposit instruction generation
 - `POST /withdraw/ix` - Withdraw instruction generation
+- `POST /close-user-account/tx` - Close user account transaction creation
+- `POST /close-user-account/ix` - Close user account instruction generation
+- `GET /health` - Health check
 
 
 ### Error Types
@@ -416,6 +458,9 @@ The SDK interacts with these API endpoints:
 - `POST /withdraw/tx` - Create withdraw transaction (requires strategyId, baseAsset, amount, userKey)
 - `POST /deposit/ix` - Get deposit instructions (requires strategyId, baseAsset, amount, userKey)
 - `POST /withdraw/ix` - Get withdraw instruction (requires strategyId, baseAsset, amount, userKey)
+- `POST /close-user-account/tx` - Close user account transaction (requires userAccount or userPubkey+strategyId+mint)
+- `POST /close-user-account/ix` - Close user account instructions (requires userAccount or userPubkey+strategyId+mint)
+- `GET /health` - Health check
 
 ## Development
 
@@ -445,5 +490,8 @@ src/
 ├── transactionForDeposit/     # Deposit transactions
 ├── transactionForWithdraw/    # Withdraw transactions
 ├── instructionsForDeposit/    # Deposit instructions
-└── instructionsForWithdraw/   # Withdraw instructions
+├── instructionsForWithdraw/   # Withdraw instructions
+├── transactionForCloseUserAccount/  # Close user account transactions
+├── instructionsForCloseUserAccount/ # Close user account instructions
+└── health/                    # Health check
 ```

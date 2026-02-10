@@ -69,6 +69,13 @@ The tests expect the following endpoints to be available:
 - `POST /instructions/deposit` - Get deposit instructions
 - `POST /instructions/withdraw` - Get withdraw instructions
 
+### Close User Account Operations
+- `POST /close-user-account/tx` - Close user account transaction
+- `POST /close-user-account/ix` - Close user account instructions
+
+### Health
+- `GET /health` - Health check
+
 ## Query Parameters Tested
 
 ### getUserValue & getUserStats
