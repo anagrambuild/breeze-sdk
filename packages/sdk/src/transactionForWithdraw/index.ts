@@ -11,12 +11,16 @@ export async function getTransactionForWithdraw(
   payer_key?: string,
   base_asset?: string,
   strategy_id?: string,
-  user_token_account?: string
+  user_token_account?: string,
+  create_wsol_ata?: boolean,
+  unwrap_wsol_ata?: boolean,
+  detect_wsol_ata?: boolean,
+  exclude_fees?: boolean
 ) {
   const headers: Record<string, string> = {
     "x-api-key": api_key,
   };
-  
+
   const body_content: BodyForTxWithdraw = {
     params: {
       fund_id,
@@ -27,6 +31,10 @@ export async function getTransactionForWithdraw(
       base_asset,
       strategy_id,
       user_token_account,
+      create_wsol_ata,
+      unwrap_wsol_ata,
+      detect_wsol_ata,
+      exclude_fees,
     }
   };
 
