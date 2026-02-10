@@ -13,6 +13,9 @@ export { getTransactionForDeposit } from './transactionForDeposit';
 export { getTransactionForWithdraw } from './transactionForWithdraw';
 export { getInstructionsForDeposit } from './instructionsForDeposit';
 export { getInstructionForWithdraw } from './instructionsForWithdraw';
+export { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
+export { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
+export { getHealth } from './health';
 
 // Type exports
 export type { default as UserYield } from './getUserYield/types';
@@ -23,4 +26,7 @@ export type { TransactionForDeposit, BodyForTxDeposit } from './transactionForDe
 export type { TransactionForWithdraw, BodyForTxWithdraw } from './transactionForWithdraw/types';
 export type { default as InstructionsForDeposit, BodyForDepositInstructions } from './instructionsForDeposit/types';
 export type { default as InstructionsForWithdraw, BodyForWithdrawInstructions } from './instructionsForWithdraw/types';
+export type { TransactionForCloseUserAccount, BodyForTxCloseUserAccount } from './transactionForCloseUserAccount/types';
+export type { default as InstructionsForCloseUserAccount, BodyForCloseUserAccountInstructions } from './instructionsForCloseUserAccount/types';
+export type { HealthResponse } from './health/types';
 

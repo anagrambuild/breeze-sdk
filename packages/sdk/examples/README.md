@@ -119,6 +119,11 @@ npm install --save-dev tsx
 - `createWithdrawTransaction(options)` - Create withdraw transaction
 - `getDepositInstructions(options)` - Get deposit instructions
 - `getWithdrawInstruction(options)` - Get withdraw instruction
+- `createCloseUserAccountTransaction(options)` - Close user account transaction
+- `getCloseUserAccountInstructions(options)` - Close user account instructions
+
+### Health
+- `getHealth()` - Check API server health
 
 ## Flow Description
 

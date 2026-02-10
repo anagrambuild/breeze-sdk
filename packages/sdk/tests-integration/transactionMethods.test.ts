@@ -114,7 +114,8 @@ describe('Transaction Methods Integration Test', () => {
         strategyId: TEST_CONFIG.testStrategyId,
         baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
-        userKey: TEST_CONFIG.testUserKey
+        userKey: TEST_CONFIG.testUserKey,
+        payerKey: TEST_CONFIG.testPayerKey
       });
 
       expect(result).toBeDefined();

@@ -7,6 +7,9 @@ import { getTransactionForDeposit } from './transactionForDeposit';
 import { getTransactionForWithdraw } from './transactionForWithdraw';
 import { getInstructionsForDeposit } from './instructionsForDeposit';
 import { getInstructionForWithdraw } from './instructionsForWithdraw';
+import { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
+import { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
+import { getHealth } from './health';
 
 export interface BreezeSDKConfig {
   baseUrl?: string;
@@ -180,6 +183,56 @@ export class BreezeSDK {
       options.strategyId,
       options.userTokenAccount
     );
+  }
+
+  // Close user account operations
+  async createCloseUserAccountTransaction(options: {
+    userAccount?: string;
+    userPubkey?: string;
+    strategyId?: string;
+    mint?: string;
+    payer?: string;
+    fundsRecipient?: string;
+    userTokenAccount?: string;
+  }) {
+    return getTransactionForCloseUserAccount(
+      this.apiClient,
+      this.apiKey,
+      options.userAccount,
+      options.userPubkey,
+      options.strategyId,
+      options.mint,
+      options.payer,
+      options.fundsRecipient,
+      options.userTokenAccount
+    );
+  }
+
+  async getCloseUserAccountInstructions(options: {
+    userAccount?: string;
+    userPubkey?: string;
+    strategyId?: string;
+    mint?: string;
+    payer?: string;
+    fundsRecipient?: string;
+    userTokenAccount?: string;
+  }) {
+    return getInstructionsForCloseUserAccount(
+      this.apiClient,
+      this.apiKey,
+      options.userAccount,
+      options.userPubkey,
+      options.strategyId,
+      options.mint,
+      options.payer,
+      options.fundsRecipient,
+      options.userTokenAccount
+    );
+  }
+
+  // Health check
+  async getHealth() {
+    return getHealth(this.apiClient, this.apiKey);
   }
 
   // Utility methods
