@@ -8,7 +8,6 @@ export type BodyForWithdrawInstructions = {
 };
 
 type InputForWithdraw = {
-  fund_id?: string;
   amount?: number;
   all?: boolean;
   payer_key?: string;

@@ -4,7 +4,6 @@ import { BodyForTxWithdraw, TransactionForWithdraw } from "./types";
 export async function getTransactionForWithdraw(
   api_client: ApiClient,
   api_key: string,
-  fund_id?: string,
   amount?: number,
   user_key?: string,
   all?: boolean,
@@ -23,7 +22,6 @@ export async function getTransactionForWithdraw(
 
   const body_content: BodyForTxWithdraw = {
     params: {
-      fund_id,
       amount,
       user_key,
       all,

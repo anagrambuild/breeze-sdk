@@ -1,4 +1,4 @@
-import { ApiClient, BreezeApiError } from './builder';
+import { ApiClient } from './builder';
 import { getUserYield } from './getUserYield';
 import { getUserBalances } from './getUserBalances';
 import { getBreezeBalances } from './getBreezeBalances';
@@ -9,6 +9,9 @@ import { getInstructionsForDeposit } from './instructionsForDeposit';
 import { getInstructionForWithdraw } from './instructionsForWithdraw';
 import { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
 import { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
+import { getInstructionForSetDelegatedWithdrawer } from './instructionsForSetDelegatedWithdrawer';
+import { getFund } from './getFund';
+import { getOrganizationFunds } from './getOrganizationFunds';
 import { getHealth } from './health';
 
 export interface BreezeSDKConfig {
@@ -69,7 +72,7 @@ export class BreezeSDK {
     sortOrder?: string;
     page?: number;
     limit?: number;
-    strategyId: string; // Obligatory parameter
+    strategyId: string;
   }) {
     return getBreezeBalances(
       this.apiClient,
@@ -86,6 +89,37 @@ export class BreezeSDK {
 
   async getStrategyInfo(strategyId: string) {
     return getStrategyInfo(this.apiClient, this.apiKey, strategyId);
+  }
+
+  // Fund operations (bearer token auth)
+  async getFund(options: {
+    fundId: string;
+    bearerToken: string;
+  }) {
+    return getFund(this.apiClient, options.bearerToken, options.fundId);
+  }
+
+  async getOrganizationFunds(options: {
+    bearerToken: string;
+  }) {
+    return getOrganizationFunds(this.apiClient, options.bearerToken);
+  }
+
+  async getSetDelegatedWithdrawerInstruction(options: {
+    bearerToken: string;
+    fundAuthority: string;
+    delegatedWithdrawer?: string | null;
+    fundId?: string;
+    fundIndex?: number;
+  }) {
+    return getInstructionForSetDelegatedWithdrawer(
+      this.apiClient,
+      options.bearerToken,
+      options.fundAuthority,
+      options.delegatedWithdrawer,
+      options.fundId,
+      options.fundIndex
+    );
   }
 
   // Transaction operations
@@ -114,7 +148,6 @@ export class BreezeSDK {
   }
 
   async createWithdrawTransaction(options: {
-    fundId?: string;
     amount?: number;
     userKey?: string;
     all?: boolean;
@@ -130,11 +163,41 @@ export class BreezeSDK {
     return getTransactionForWithdraw(
       this.apiClient,
       this.apiKey,
-      options.fundId,
       options.amount,
       options.userKey,
       options.all,
       options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount,
+      options.createWsolAta,
+      options.unwrapWsolAta,
+      options.detectWsolAta,
+      options.excludeFees
+    );
+  }
+
+  // Authority/delegated withdraw-out convenience method.
+  async createWithdrawOutTransaction(options: {
+    strategyId: string;
+    baseAsset: string;
+    targetUserKey: string;
+    authorityKey: string;
+    amount?: number;
+    all?: boolean;
+    userTokenAccount?: string;
+    createWsolAta?: boolean;
+    unwrapWsolAta?: boolean;
+    detectWsolAta?: boolean;
+    excludeFees?: boolean;
+  }) {
+    return getTransactionForWithdraw(
+      this.apiClient,
+      this.apiKey,
+      options.amount,
+      options.targetUserKey,
+      options.all,
+      options.authorityKey,
       options.baseAsset,
       options.strategyId,
       options.userTokenAccount,
@@ -170,7 +233,6 @@ export class BreezeSDK {
   }
 
   async getWithdrawInstruction(options: {
-    fundId?: string;
     amount?: number;
     userKey?: string;
     all?: boolean;
@@ -186,11 +248,41 @@ export class BreezeSDK {
     return getInstructionForWithdraw(
       this.apiClient,
       this.apiKey,
-      options.fundId,
       options.amount,
       options.userKey,
       options.all,
       options.payerKey,
+      options.baseAsset,
+      options.strategyId,
+      options.userTokenAccount,
+      options.createWsolAta,
+      options.unwrapWsolAta,
+      options.detectWsolAta,
+      options.excludeFees
+    );
+  }
+
+  // Authority/delegated withdraw-out convenience method.
+  async getWithdrawOutInstruction(options: {
+    strategyId: string;
+    baseAsset: string;
+    targetUserKey: string;
+    authorityKey: string;
+    amount?: number;
+    all?: boolean;
+    userTokenAccount?: string;
+    createWsolAta?: boolean;
+    unwrapWsolAta?: boolean;
+    detectWsolAta?: boolean;
+    excludeFees?: boolean;
+  }) {
+    return getInstructionForWithdraw(
+      this.apiClient,
+      this.apiKey,
+      options.amount,
+      options.targetUserKey,
+      options.all,
+      options.authorityKey,
       options.baseAsset,
       options.strategyId,
       options.userTokenAccount,

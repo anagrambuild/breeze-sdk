@@ -96,7 +96,6 @@ describe('Instruction Methods Integration Test', () => {
   describe('getWithdrawInstruction', () => {
     it('should successfully get withdraw instruction with all options', async () => {
       const result = await sdk.getWithdrawInstruction({
-        fundId: TEST_CONFIG.testFundId,
         strategyId: TEST_CONFIG.testStrategyId,
         baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,

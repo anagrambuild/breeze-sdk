@@ -4,7 +4,6 @@ import InstructionsForWithdraw, { BodyForWithdrawInstructions } from "./types";
 export async function getInstructionForWithdraw(
   api_client: ApiClient,
   api_key: string,
-  fund_id?: string,
   amount?: number,
   user_key?: string,
   all?: boolean,
@@ -23,7 +22,6 @@ export async function getInstructionForWithdraw(
 
   const body_content: BodyForWithdrawInstructions = {
     params: {
-      fund_id,
       amount,
       user_key,
       all,
