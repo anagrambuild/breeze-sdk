@@ -5,14 +5,14 @@ import InstructionForSetDelegatedWithdrawer, {
 
 export async function getInstructionForSetDelegatedWithdrawer(
   api_client: ApiClient,
-  bearer_token: string,
+  api_key: string,
   fund_authority: string,
   delegated_withdrawer?: string | null,
   fund_id?: string,
   fund_index?: number,
 ) {
   const headers: Record<string, string> = {
-    Authorization: `Bearer ${bearer_token}`,
+    "x-api-key": api_key,
   };
 
   const body_content: BodyForSetDelegatedWithdrawerInstructions = {

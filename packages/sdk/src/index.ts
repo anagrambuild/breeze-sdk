@@ -13,6 +13,7 @@ export { getTransactionForDeposit } from './transactionForDeposit';
 export { getTransactionForWithdraw } from './transactionForWithdraw';
 export { getInstructionsForDeposit } from './instructionsForDeposit';
 export { getInstructionForWithdraw } from './instructionsForWithdraw';
+export { getInstructionForSetDelegatedWithdrawer } from './instructionsForSetDelegatedWithdrawer';
 export { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
 export { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
 export { getHealth } from './health';
@@ -26,6 +27,10 @@ export type { TransactionForDeposit, BodyForTxDeposit } from './transactionForDe
 export type { TransactionForWithdraw, BodyForTxWithdraw } from './transactionForWithdraw/types';
 export type { default as InstructionsForDeposit, BodyForDepositInstructions } from './instructionsForDeposit/types';
 export type { default as InstructionsForWithdraw, BodyForWithdrawInstructions } from './instructionsForWithdraw/types';
+export type {
+  default as InstructionForSetDelegatedWithdrawer,
+  BodyForSetDelegatedWithdrawerInstructions,
+} from './instructionsForSetDelegatedWithdrawer/types';
 export type { TransactionForCloseUserAccount, BodyForTxCloseUserAccount } from './transactionForCloseUserAccount/types';
 export type { default as InstructionsForCloseUserAccount, BodyForCloseUserAccountInstructions } from './instructionsForCloseUserAccount/types';
 export type { HealthResponse } from './health/types';

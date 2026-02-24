@@ -9,6 +9,7 @@ import { getInstructionsForDeposit } from './instructionsForDeposit';
 import { getInstructionForWithdraw } from './instructionsForWithdraw';
 import { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
 import { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
+import { getInstructionForSetDelegatedWithdrawer } from './instructionsForSetDelegatedWithdrawer';
 import { getHealth } from './health';
 
 export interface BreezeSDKConfig {
@@ -86,6 +87,22 @@ export class BreezeSDK {
 
   async getStrategyInfo(strategyId: string) {
     return getStrategyInfo(this.apiClient, this.apiKey, strategyId);
+  }
+
+  async getSetDelegatedWithdrawerInstruction(options: {
+    fundAuthority: string;
+    delegatedWithdrawer?: string | null;
+    fundId?: string;
+    fundIndex?: number;
+  }) {
+    return getInstructionForSetDelegatedWithdrawer(
+      this.apiClient,
+      this.apiKey,
+      options.fundAuthority,
+      options.delegatedWithdrawer,
+      options.fundId,
+      options.fundIndex
+    );
   }
 
   // Transaction operations

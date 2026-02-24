@@ -3,10 +3,10 @@ import OrganizationFundsResponse from "./types";
 
 export async function getOrganizationFunds(
   api_client: ApiClient,
-  bearer_token: string,
+  api_key: string,
 ) {
   const headers: Record<string, string> = {
-    Authorization: `Bearer ${bearer_token}`,
+    "x-api-key": api_key,
   };
 
   return await api_client.request<OrganizationFundsResponse>(`funds`, "GET", {
