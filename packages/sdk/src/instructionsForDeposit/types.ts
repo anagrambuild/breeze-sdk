@@ -8,7 +8,6 @@ export type BodyForDepositInstructions = {
 };
 
 type InputForDeposit = {
-  fund_id?: string;
   amount?: number;
   all?: boolean;
   payer_key?: string;

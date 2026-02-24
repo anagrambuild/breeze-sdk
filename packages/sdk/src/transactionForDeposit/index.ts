@@ -4,7 +4,6 @@ import { BodyForTxDeposit, TransactionForDeposit } from "./types";
 export async function getTransactionForDeposit(
   api_client: ApiClient,
   api_key: string,
-  fund_id?: string,
   amount?: number,
   user_key?: string,
   all?: boolean,
@@ -16,10 +15,9 @@ export async function getTransactionForDeposit(
   const headers: Record<string, string> = {
     "x-api-key": api_key,
   };
-  
+
   const body_content: BodyForTxDeposit = {
     params: {
-      fund_id,
       amount,
       user_key,
       all,

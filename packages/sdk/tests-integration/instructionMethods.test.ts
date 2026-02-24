@@ -18,7 +18,6 @@ describe('Instruction Methods Integration Test', () => {
   describe('getDepositInstructions', () => {
     it('should successfully get deposit instructions with all options', async () => {
       const result = await sdk.getDepositInstructions({
-        fundId: TEST_CONFIG.testFundId,
         strategyId: TEST_CONFIG.testStrategyId,
         baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
@@ -32,7 +31,6 @@ describe('Instruction Methods Integration Test', () => {
 
     it('should successfully get deposit instructions with minimal options', async () => {
       const result = await sdk.getDepositInstructions({
-        fundId: TEST_CONFIG.testFundId,
         amount: TEST_CONFIG.testAmount,
         userKey: TEST_CONFIG.testUserKey
       });

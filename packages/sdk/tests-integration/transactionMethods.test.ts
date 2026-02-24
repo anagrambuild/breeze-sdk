@@ -18,7 +18,6 @@ describe('Transaction Methods Integration Test', () => {
   describe('createDepositTransaction', () => {
     it('should successfully create deposit transaction with all options', async () => {
       const result = await sdk.createDepositTransaction({
-        fundId: TEST_CONFIG.testFundId,
         // strategyId: TEST_CONFIG.testStrategyId,
         // baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
@@ -32,7 +31,6 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create deposit transaction with minimal options', async () => {
       const result = await sdk.createDepositTransaction({
-        fundId: TEST_CONFIG.testFundId,
         // strategyId: TEST_CONFIG.testStrategyId,
         // baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,
@@ -46,7 +44,6 @@ describe('Transaction Methods Integration Test', () => {
 
     it('should successfully create deposit transaction with all=true', async () => {
       const result = await sdk.createDepositTransaction({
-        fundId: TEST_CONFIG.testFundId,
         // strategyId: TEST_CONFIG.testStrategyId,
         // baseAsset: TEST_CONFIG.testBaseAssetMint,
         amount: TEST_CONFIG.testAmount,

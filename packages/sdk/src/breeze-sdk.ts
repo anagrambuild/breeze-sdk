@@ -124,7 +124,6 @@ export class BreezeSDK {
 
   // Transaction operations
   async createDepositTransaction(options: {
-    fundId?: string;
     amount?: number;
     userKey?: string;
     all?: boolean;
@@ -136,7 +135,6 @@ export class BreezeSDK {
     return getTransactionForDeposit(
       this.apiClient,
       this.apiKey,
-      options.fundId,
       options.amount,
       options.userKey,
       options.all,
@@ -209,7 +207,6 @@ export class BreezeSDK {
   }
 
   async getDepositInstructions(options: {
-    fundId?: string;
     amount?: number;
     userKey?: string;
     all?: boolean;
@@ -221,7 +218,6 @@ export class BreezeSDK {
     return getInstructionsForDeposit(
       this.apiClient,
       this.apiKey,
-      options.fundId,
       options.amount,
       options.userKey,
       options.all,
