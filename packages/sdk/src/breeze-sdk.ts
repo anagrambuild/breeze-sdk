@@ -9,9 +9,6 @@ import { getInstructionsForDeposit } from './instructionsForDeposit';
 import { getInstructionForWithdraw } from './instructionsForWithdraw';
 import { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
 import { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
-import { getInstructionForSetDelegatedWithdrawer } from './instructionsForSetDelegatedWithdrawer';
-import { getFund } from './getFund';
-import { getOrganizationFunds } from './getOrganizationFunds';
 import { getHealth } from './health';
 
 export interface BreezeSDKConfig {
@@ -89,37 +86,6 @@ export class BreezeSDK {
 
   async getStrategyInfo(strategyId: string) {
     return getStrategyInfo(this.apiClient, this.apiKey, strategyId);
-  }
-
-  // Fund operations (bearer token auth)
-  async getFund(options: {
-    fundId: string;
-    bearerToken: string;
-  }) {
-    return getFund(this.apiClient, options.bearerToken, options.fundId);
-  }
-
-  async getOrganizationFunds(options: {
-    bearerToken: string;
-  }) {
-    return getOrganizationFunds(this.apiClient, options.bearerToken);
-  }
-
-  async getSetDelegatedWithdrawerInstruction(options: {
-    bearerToken: string;
-    fundAuthority: string;
-    delegatedWithdrawer?: string | null;
-    fundId?: string;
-    fundIndex?: number;
-  }) {
-    return getInstructionForSetDelegatedWithdrawer(
-      this.apiClient,
-      options.bearerToken,
-      options.fundAuthority,
-      options.delegatedWithdrawer,
-      options.fundId,
-      options.fundIndex
-    );
   }
 
   // Transaction operations

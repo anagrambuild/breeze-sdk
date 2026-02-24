@@ -9,13 +9,10 @@ export { getUserYield } from './getUserYield';
 export { getUserBalances } from './getUserBalances';
 export { getBreezeBalances } from './getBreezeBalances';
 export { getStrategyInfo } from './getStrategyInfo';
-export { getFund } from './getFund';
-export { getOrganizationFunds } from './getOrganizationFunds';
 export { getTransactionForDeposit } from './transactionForDeposit';
 export { getTransactionForWithdraw } from './transactionForWithdraw';
 export { getInstructionsForDeposit } from './instructionsForDeposit';
 export { getInstructionForWithdraw } from './instructionsForWithdraw';
-export { getInstructionForSetDelegatedWithdrawer } from './instructionsForSetDelegatedWithdrawer';
 export { getTransactionForCloseUserAccount } from './transactionForCloseUserAccount';
 export { getInstructionsForCloseUserAccount } from './instructionsForCloseUserAccount';
 export { getHealth } from './health';
@@ -25,16 +22,10 @@ export type { default as UserYield } from './getUserYield/types';
 export type { default as UserBalances } from './getUserBalances/types';
 export type { default as BreezeBalancesResponse, BreezeBalance } from './getBreezeBalances/types';
 export type { default as StrategyInfo } from './getStrategyInfo/types';
-export type { default as Fund, LendFundStatus, FundOrganization } from './getFund/types';
-export type { default as OrganizationFundsResponse, FundWithStrategyInfo } from './getOrganizationFunds/types';
 export type { TransactionForDeposit, BodyForTxDeposit } from './transactionForDeposit/types';
 export type { TransactionForWithdraw, BodyForTxWithdraw } from './transactionForWithdraw/types';
 export type { default as InstructionsForDeposit, BodyForDepositInstructions } from './instructionsForDeposit/types';
 export type { default as InstructionsForWithdraw, BodyForWithdrawInstructions } from './instructionsForWithdraw/types';
-export type {
-  default as InstructionForSetDelegatedWithdrawer,
-  BodyForSetDelegatedWithdrawerInstructions,
-} from './instructionsForSetDelegatedWithdrawer/types';
 export type { TransactionForCloseUserAccount, BodyForTxCloseUserAccount } from './transactionForCloseUserAccount/types';
 export type { default as InstructionsForCloseUserAccount, BodyForCloseUserAccountInstructions } from './instructionsForCloseUserAccount/types';
 export type { HealthResponse } from './health/types';
