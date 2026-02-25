@@ -90,6 +90,7 @@ export class BreezeSDK {
 
   // Transaction operations
   async createDepositTransaction(options: {
+    /** @deprecated Use `strategyId` + `baseAsset`. See https://api.breeze.baby/openapi/sdk.json */
     fundId?: string;
     amount?: number;
     userKey?: string;
@@ -114,6 +115,7 @@ export class BreezeSDK {
   }
 
   async createWithdrawTransaction(options: {
+    /** @deprecated Use `strategyId` + `baseAsset`. See https://api.breeze.baby/openapi/sdk.json */
     fundId?: string;
     amount?: number;
     userKey?: string;
@@ -146,6 +148,7 @@ export class BreezeSDK {
   }
 
   async getDepositInstructions(options: {
+    /** @deprecated Use `strategyId` + `baseAsset`. See https://api.breeze.baby/openapi/sdk.json */
     fundId?: string;
     amount?: number;
     userKey?: string;
@@ -170,6 +173,7 @@ export class BreezeSDK {
   }
 
   async getWithdrawInstruction(options: {
+    /** @deprecated Use `strategyId` + `baseAsset`. See https://api.breeze.baby/openapi/sdk.json */
     fundId?: string;
     amount?: number;
     userKey?: string;
