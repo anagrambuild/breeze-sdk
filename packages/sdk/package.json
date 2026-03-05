@@ -28,6 +28,15 @@
     "example:basic": "tsx examples/basic-usage.ts",
     "example:integration": "tsx examples/integration-flow.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anagrambuild/breeze-sdk.git",
+    "directory": "packages/sdk"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "author": "",
   "license": "MIT",
   "devDependencies": {

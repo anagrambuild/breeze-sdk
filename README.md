@@ -462,6 +462,36 @@ The SDK interacts with these API endpoints:
 - `POST /close-user-account/ix` - Close user account instructions (requires userAccount or userPubkey+strategyId+mint)
 - `GET /health` - Health check
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and automated npm publishing.
+
+### Continuous Integration
+
+Every push to `main` and every pull request runs the CI pipeline (`.github/workflows/ci.yml`), which:
+
+- Builds the SDK
+- Runs unit tests
+- Tests against Node.js 20 and 22
+
+### Publishing to npm
+
+Publishing is fully automated via `.github/workflows/publish.yml` and uses [npm Trusted Publishing (OIDC)](https://docs.npmjs.com/trusted-publishers/) — no tokens or secrets required.
+
+**To release a new version:**
+
+```bash
+cd packages/sdk
+npm version patch   # or minor / major
+git push origin main --tags
+```
+
+Pushing a `v*` tag triggers the publish workflow, which:
+
+1. Builds and tests the SDK
+2. Publishes to npm with [provenance attestation](https://docs.npmjs.com/generating-provenance-statements/)
+3. Creates a GitHub Release with auto-generated release notes
+
 ## Development
 
 ### Building
