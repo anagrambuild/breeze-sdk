@@ -7,6 +7,7 @@ export type BodyForTxDeposit = {
 };
 
 type InputForDeposit = {
+  /** @deprecated Use `strategy_id` + `base_asset`. See https://api.breeze.baby/openapi/sdk.json */
   fund_id?: string;
   amount?: number;
   all?: boolean;
