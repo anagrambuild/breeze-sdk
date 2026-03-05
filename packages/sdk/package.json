@@ -1,6 +1,6 @@
 {
   "name": "@breezebaby/breeze-sdk",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Breeze SDK",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
