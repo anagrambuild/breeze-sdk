@@ -56,8 +56,6 @@ export class ApiClient {
         signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
-
       // Get the response text once
       const responseText = await res.text();
       
@@ -93,8 +91,6 @@ export class ApiClient {
         );
       }
     } catch (error: any) {
-      clearTimeout(timeoutId);
-      
       if (error?.name === 'AbortError') {
         throw new BreezeApiError('Request timeout', 408, 'TIMEOUT');
       }
@@ -108,6 +104,8 @@ export class ApiClient {
         undefined,
         'NETWORK_ERROR'
       );
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 }
